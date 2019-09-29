@@ -1,0 +1,62 @@
+
+ .col-md-1 {
+ 	
+	
+	padding: 15px;
+
+ }
+
+ .col-md-11{
+ 	
+ 	
+	padding: 15px;
+  height: auto;
+  min-height: 100px;
+  max-height: 600px;
+ 	
+ 	
+ }
+ 
+
+ .addheader{
+ 	background:#7AF979;
+ }
+
+
+         
+
+.btn-primary{
+
+        border-radius: 5px;
+      	width: 100%;
+        background: #2CABF3;
+         }
+
+ .btn-danger{
+           border-radius: 5px;
+           width: 100%;
+           background: #F75050;
+           
+           
+
+         
+        
+      }
+.arrange{
+margin-left: 10px;
+margin-right: 10px;
+width: 100%
+}
+.form-row{
+	margin: 40px;
+}
+#name
+{
+  font-size: 26px;
+  font-weight: 2px;
+}
+#field
+{
+  font-size: 20px;
+  font-family: 'Verdana', sans-serif
+}

@@ -1,0 +1,201 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'dean/homestyle.css' %}">
+    <link rel="stylesheet" href="{% static 'dean/admin_home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    
+    <title>bootstrap 4 sidebar</title>
+  </head>
+  <body>
+   
+   <div class="wrapper">
+   	<nav id="sidebar">
+   		<div class="sidebar-header">
+   			<img src="{% static 'dean/logo.png' %}" alt="logo">
+   		</div>
+   		
+   		
+   		<ul class="list-unstyled components">
+   			
+   			  <li >
+   				   <<a href="{% url 'deanhome' %}" >Home</a>
+   			  </li>
+   			  <li>
+       			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                  <a href="{% url 'changepassword' %}">Change Password</a>
+                </li>
+
+                <li>
+   				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
+   			</li>
+          
+              </ul>    
+            </li> 		 
+              <li >
+            <a href="{% url 'addfaculty' %}">Add Faculty</a>
+          </li>
+          <li >
+            <a href="{% url 'addcourse' %}">Add Courses</a>
+          </li>
+            <li>
+            <a href="{% url 'assign' %}">Assign Teachers</a>
+          </li>
+          <li class="active">
+              <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
+          </li>
+             <li>
+                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+             </li>
+             <li>
+                 <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+     	</ul>
+   		
+   		
+      <ul class="list-unstyled CTAs">
+   			<li>
+   				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
+   			</li>
+   			<li>
+   				<a href="#" class="article">Contact us</a>
+   			</li>
+   		</ul>
+   	</nav>
+   	
+    <div class="content">
+   	  <nav class="navbar navbar-expand-lg navbar-light"style="background-color: #e3f2fd">
+   		
+
+   		  <button type="button" id="sidebarCollapse" class="btn btn-info">
+   			  <i class="fa fa-align-justify"></i>    		
+        </button>
+        <div class = "title" >
+        <h1> NIT Nagaland Academic Performance Information System </h1>
+   		   </div>
+  <!--<a class="navbar-brand" href="#">Navbar</a> -->
+  
+</nav>
+<form method="post" action="{% url 'dean_verdict' %}">
+     {% csrf_token %}
+  <div class="row justify-content-center">
+    <div class="column">
+     <div class="card">
+    
+        <div class="d-flex bd-highlight">
+              <div class="p-2 flex-fill bd-highlight">
+              <h4>
+              <label for="year">Year</label>
+             </h4>
+              </div>
+            <div class="p-2 flex-fill bd-highlight">
+          
+                 <input  name="year" type="text" class="form-control " id="year" value="{{year}}" readonly>
+                  
+            </div>
+             <div class="p-2 flex-fill bd-highlight">
+              <h4>
+              <label for="semester">Semester</label>
+              </h4>
+              </div>
+            <div class="p-2 flex-fill bd-highlight">
+             
+               <input  name="semester" type="text" class="form-control " id="semester" value="{{semester}}" readonly>
+            </div>
+           <div class="p-2 flex-fill bd-highlight">
+              <h4><label for="course_code">Course code</label></h4>             
+               </div>
+
+            <div class="p-2 flex-fill bd-highlight"> 
+            
+               <input name="course_id" type="text" class="form-control" id="course_code" value="{{ course_id }}" readonly >
+            </div>
+        </div>
+            
+       
+            
+       
+     
+    </div>
+ </div>
+</div>
+     
+          
+       
+      <div class="row justify-content-center">  
+      <div class="col-md-9 mark_entry">
+           <div class="card">
+            <h5 class="card-header submitted">Marks Submitted </h5>
+                <div class="card-body">
+                 
+
+
+
+                                  <table >
+                                        <tr style="font-size:15px">
+                                          <th >Registration No.</th>
+                                          <th >Mid-Semester </th>
+                                          <th >End-Semester</th>
+                                          <th >Totak Marks</th>
+                                          <th >Grade</th>
+                                          
+                                        </tr>
+                                        {% for student in students %}
+                                        <tr>
+                                           
+                                          <td ><input style="width:150px"type="text" name="marks_reg{{ student.registration_no }}" class="form-control" value="{{ student.registration_no }}" readonly </td>
+                                          <td ><input style="widows: 150px"type="text" name="marks_reg{{ student.registration_no }}" class="form-control" value="{{ student.mid_sem }}" readonly </td> 
+                                          <td><input style="width:150px"type="text" name="marks_reg{{ student.registration_no }}" class="form-control" value="{{ student.end_sem }}" readonly </td>
+                                      
+                                          <td ><input  style="width:150px "type="text" name="marks_midsem{{ student.registration_no }}"  class="form-control" value="{{ student.total_marks }}"readonly > </td>
+                                          <td ><input  style="width:150px" type="text" class="form-control"  name="marks_endsem{{ student.registration_no }}" value="{{ student.Grade}}" readonly > </td>
+                                          
+                                        </tr>
+                                        {% endfor %}
+                                    
+                                  </table>
+                                  <br>
+                                  <br>
+                            
+                                  <button name="accept"style="width:200px"type="submit" class="btn btn-primary">Accept</button>
+                                  <button name="decline"style="width:200px"type="submit" class="btn btn-danger">Decline</button>
+                  </div>
+                         
+                 
+                </div>
+          </div>
+    </div>
+ </form>
+    </div>
+  	
+  	
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <script>
+	    $(document).ready(function(){
+			$('#sidebarCollapse').on('click',function(){
+				$('#sidebar').toggleClass('active');
+			});
+		});  
+	</script>
+    
+    
+    
+    
+    
+  </body>
+</html>

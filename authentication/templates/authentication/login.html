@@ -1,0 +1,47 @@
+{% load static %}
+<html>
+<head>
+	<title> login page</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'authentication/loginstyle.css' %}">
+		    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+	{% if messages %}
+                <ul>
+                    {% for message in messages %}
+
+                           <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                              <strong>{{ message }}</strong>
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                    {% endfor %}
+                </ul>
+        {% endif %}
+	<div class="login_box">
+		<img src="{% static 'authentication/NIT.png' %}" class="login">
+		<h1>Login Here</h1>
+		<form method="post" action="{% url 'login_submission' %}">
+			{% csrf_token %}
+			<p>Student or Employee or Dean</p>
+			<input type="text" name="username" placeholder="Enter Username">
+			<br>
+			<p>Password</p>
+			
+			<input type="Password"  name="password" placeholder="Enter Password">
+			<br>
+
+			<input type ="Submit" name=""
+			value="Login">
+			<a href=><b>Lost your Password?,</b></a><br>
+			<a href="{% url 'register' %}"><b>Don't have an account?Register here</b></a><br>
+			
+		</form>
+	</div>
+</body>

@@ -1,0 +1,322 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Grade card</title>
+    <link rel="stylesheet" href="{% static 'student/gradecard.css' %}">
+    
+      <style>
+          body{
+                  background: linear-gradient(rgba(255,255,255,.7), rgba(255,255,255,.7)), url({% static 'student/logo.png' %});
+                  background-repeat:no-repeat ;
+                  background-size : 550px 550px;
+                  background-position : 50% 39%;
+               
+                  
+
+          }
+      </style>
+  </head>
+  <body>
+        <p > <strong> Serial no:- {{ serial_no }}</strong></p>
+        <div class="header">
+            <div id="image">
+                <img src="{% static 'student/logo.png' %}" alt="logo">
+            </div>
+            <div class="title">
+                    <ul style="list-style-type:none;">
+                            <li style="font-size: 16px;">
+                               <b> राष्ट्रीय प्रौद्योगिकी संस्थान नागालैंड</b>
+                
+                            </li>
+                            <li style="font-size:16px;">
+                              <strong> NATIONAL INSTITUTE OF TECHNOLOGY NAGALAND </strong>
+                            </li>
+                            <li>
+                             (An Institue of National Importance under MHRD , Government of India)
+                              </li>
+                              <li style="font-size:16px;">
+                               <strong>Chumukedima, Dimapur, Nagaland - 797103 </strong>
+                              </li><br>
+                            
+                              <li style="font-size:17px;">
+                                  <strong>Ph.D Programme </strong>
+                                 </li> <li style="font-size:17px;">
+                                    <strong>GRADE CARD </strong>
+                                   </li>
+                          </ul>
+                     
+            </div>
+        </div>
+        <div class="row ">
+            <div class="table">
+                <table>
+                  <tr>
+                    <th colspan="2">NAME OF THE CANDIDATE</th>
+                    <th colspan="6">{{ profile_details.first_name }} {{ profile_details.last_name }}</th>
+                    <th colspan="2">REGISTRATION NO.</th>  
+                    <th colspan="2">{{ profile_details.regno }}</th>
+                  </tr>
+                  <tr>
+                      <th colspan="2">DATE OF BIRTH</th>
+                      <th colspan="6">{{ profile_details.dob }}</th>
+                      <th colspan="2">GENDER</th>  
+                      <th colspan="2">{{ profile_details.gender }}</th>
+                  </tr>
+                  <tr>
+                      <th colspan="2">Branch</th>
+                      <th colspan="6">{{ profile_details.branch}}</th>
+                      <th colspan="2">Date of Publication</th>  
+                      <th colspan="2">{{ profile_details.date_publish }}</th>
+                  </tr>
+                  <tr>
+                      <th>Semester no.</th>
+                      <th colspan="1">Course Code</th>
+                      <th colspan="6">Course Title</th>
+                      <th >Credits</th>  
+                      <th>Letter Grade</th>
+                      <th>Grade Point </th>
+                      <th>Month & Year of Examination</th>
+                  </tr>
+                    {% for key, value in grades_entry.items %}
+                    {% ifequal key 'students' %}
+                    {% for student in value %}
+                  <tr >
+                    <th id="remove" > {{ student.semester }}</th>
+                    <th id = "remove"colspan="1">{{ student.course_id }}</th>
+                    <th id = "remove" class="alignment"colspan="6">{{ student.course_name }}</th>
+                    <th id = "remove">{{ student.credits }}</th>
+                    <th id = "remove">{{ student.grade }}</th>
+                    <th id = "remove">{{ student.gradepoint }}</th>
+                    <th id="remove"> {{ student.month}} {{ student.year }}</th>
+
+                  </tr>
+                    {% endfor %}
+                    {% endifequal %}
+                    {% endfor %}
+
+                        <tr >
+                            <th id="remove" >  </th>
+                            <th id = "remove"colspan="1"></th>
+                            <th id = "remove"colspan="6"></th>
+                            <th id = "remove"></th>
+                            <th id = "remove"></th>
+                            <th id = "remove"> </th>
+                            <th id="remove"> </th>
+                          
+                          </tr>
+                          <tr >
+                              <th id="remove" >  </th>
+                              <th id = "remove"colspan="1"></th>
+                              <th id = "remove"colspan="6"></th>
+                              <th id = "remove"></th>
+                              <th id = "remove"></th>
+                              <th id = "remove"> </th>
+                              <th id="remove"> </th>
+                            
+                            </tr>
+                            <tr >
+                                <th id="remove" >  </th>
+                                <th id = "remove"colspan="1"></th>
+                                <th id = "remove"colspan="6"></th>
+                                <th id = "remove"></th>
+                                <th id = "remove"></th>
+                                <th id = "remove"> </th>
+                                <th id="remove"> </th>
+                              
+                              </tr>
+                              <tr >
+                                  <th id="remove" >  </th>
+                                  <th id = "remove"colspan="1"></th>
+                                  <th id = "remove"colspan="6"></th>
+                                  <th id = "remove"></th>
+                                  <th id = "remove"></th>
+                                  <th id = "remove"> </th>
+                                  <th id="remove"> </th>
+                                
+                                </tr>
+                                <tr>
+                                    <th>  </th>
+                                    <th colspan="1"></th>
+                                    <th colspan="6"></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th> </th>
+                                    <th> </th>
+                                  
+                                  </tr>
+                  <tr>
+                    <th colspan="2">Semester</th>
+                    <th>I</th>
+                    <th>II</th>
+                    <th> III</th>
+                    <th>IV</th>
+                    <th>V</th>
+                    <th>VI</th>
+                    <th>VII</th>
+                    <th>VIII</th>
+                    <th>IX</th>
+                    <th>X</th>
+                  </tr>
+                  <tr>
+                    <th colspan="2">Credits Registered</th>
+                    <th>{% ifequal credits_reg.one 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.one }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.two 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.two }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.three 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.three }}
+                        {% endifequal %}</th>
+                    <th>{% ifequal credits_reg.four 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.four }}
+                        {% endifequal %}</th>
+                    <th>{% ifequal credits_reg.five 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.five }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.six 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.six }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.seven 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.seven }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.eight 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.eight }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_reg.nine 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.nine }}
+                        {% endifequal %}
+                    </th>
+                    <th>
+                        {% ifequal credits_reg.ten 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_reg.ten }}
+                        {% endifequal %}
+                    </th>
+                  </tr>
+                  <tr>
+                      <th colspan="2">Credits Earned</th>
+                      <th>{% ifequal credits_earned.one 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.one }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.two 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.two }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.three 0 %}
+                            {{ credits_reg.none }}
+                        {% else %}
+                            {{ credits_earned.three }}
+                        {% endifequal %}</th>
+                    <th>{% ifequal credits_earned.four 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.four }}
+                        {% endifequal %}</th>
+                    <th>{% ifequal credits_earned.five 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.five }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.six 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.six }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.seven 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.seven }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.eight 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.eight }}
+                        {% endifequal %}
+                    </th>
+                    <th>{% ifequal credits_earned.nine 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.nine }}
+                        {% endifequal %}
+                    </th>
+                    <th>
+                        {% ifequal credits_earned.ten 0 %}
+                            {{ credits_earned.none }}
+                        {% else %}
+                            {{ credits_earned.ten }}
+                        {% endifequal %}
+                    </th>
+                   </tr>
+                   <tr>
+                     <th colspan="3">Total Credits Earned</th>
+                     <th colspan="2">{{ credits_earned.total }}</th>
+                     <th colspan="4">Cumulative Grade Point Average(CGPA) </th>
+                     <th colspan="3">{{ credits_reg.cgpa }}</th>
+                   </tr>
+            
+                </table>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        
+        
+        <div class="bottom ">
+      
+                <div class="left">
+                        <h5><strong>Associate Dean(Academic)</strong></h5>
+                     </div>
+            
+                    
+                   <div class = "right" >
+                    <h5><strong>Dean(Academic)</strong></h5>
+           
+                </div>
+       
+        
+       
+        </div>
+    
+    
+    
+    
+  </body>
+</html>

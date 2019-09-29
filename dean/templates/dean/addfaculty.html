@@ -1,0 +1,232 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'dean/homestyle.css' %}">
+     <link rel="stylesheet" href="{% static 'dean/addfaculty.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    
+    <title>add faculty</title>
+  </head>
+  <body>
+   
+   <div class="wrapper">
+    <nav id="sidebar">
+   		<div class="sidebar-header">
+   			<img src="{% static 'dean/logo.png' %}" alt="logo">
+   		</div>
+
+
+   		<ul class="list-unstyled components">
+
+   			  <li >
+   				   <a href="{% url 'deanhome' %}" >Home</a>
+   			  </li>
+   			  <li>
+       			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
+              <ul class="collapse list-unstyled" id="pageSubmenu">
+                <li>
+                  <a href="{% url 'changepassword' %}">Change Password</a>
+                </li>
+
+               <li>
+   				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
+   			</li>
+
+              </ul>
+            </li>
+              <li class="active" >
+            <a href="{% url 'addfaculty' %}">Add Faculty</a>
+          </li>
+          <li >
+            <a href="{% url 'addcourse' %}">Add Courses</a>
+          </li>
+            <li>
+            <a href="{% url 'assign' %}">Assign Teachers</a>
+          </li>
+          <li>
+              <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
+          </li>
+             <li>
+                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+             </li>
+             <li>
+                 <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+     	</ul>
+
+
+      <ul class="list-unstyled CTAs">
+   			<li>
+   				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
+   			</li>
+   			<li>
+   				<a href="#" class="article">Contact us</a>
+   			</li>
+   		</ul>
+   	</nav>
+    <div class="content">
+      <nav class="navbar navbar-expand-lg navbar-light"style="background-color: #e3f2fd">
+      
+
+        <button type="button" id="sidebarCollapse" class="btn btn-info">
+          <i class="fa fa-align-justify"></i>       
+        </button>
+        <div class = "title" >
+        <h1> NIT Nagaland Academic Performance Information System </h1>
+         </div>
+  <!--<a class="navbar-brand" href="#">Navbar</a> -->
+  
+</nav>
+
+     {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                     <div class="alert alert-secondary" role="alert">
+
+                         <p><h4>{{ message }}</h4> </p>
+                    </div>
+                    {% endfor %}
+                </ul>
+        {% endif %}
+    <div class="row" >
+        <div class="row">
+
+           
+            <div class="col-md-11  addheader" id="top">
+    
+    
+              <h3>
+                <center> Add Faculty </center>
+                  
+               
+             </h3>
+       
+            </div> 
+         </div>
+
+        <div class="row">
+
+          
+            <div class="col-md-11  " id = "bottom">
+          
+                <div class ="row arrange justify-content-center">
+                  <div class="col-md-11 " id="addfaculty">
+                    
+                      <br>
+
+                    <form method="post" action="{% url 'add_faculty_form_submission' %}">
+                        {% csrf_token %}
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="firstname">First Name</label>
+                          <input name="first_name" type="text" class="form-control" id="firstname" placeholder="First Name">
+                        </div>
+                      <div class="form-group col-md-6">
+                        <label for="lastname">Last Name</label>
+                          <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Last Name">
+                      </div>
+                     </div>
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputEmail">Email</label>
+                      <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="Empcode">Employee Code</label>
+                      <input name="employee_code" type="text" class="form-control" id="Empcode" placeholder="Employee Code">
+                    </div>
+                  </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                       <label for="inputPassword4">Password</label>
+                        <input name="password" type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="RePassword4">Retype Password</label>
+                        <input name="re_password" type="password" class="form-control" id="RePassword4" placeholder="Retype Password">
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group col-md-3">
+                        <label for="Dateofbirth">Date Of Birth</label>
+                        <input name="dob" type="date" class="form-control" id="Dateofbirth">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="department">Department</label>
+                        <select name="department" id="department" class="form-control">
+
+                            <option hidden>Choose</option>
+                            <option>Electrical and Electronics Engineering</option>
+                            <option>Electrical and Communication Engineering</option>
+
+                            <option>Computer Science and Engineering</option>
+                            <option>Electronics and Instrumentation Engineering</option>
+                            <option>Science and Humanities</option>
+                            <option>Mathematics</option>
+                            <option>Physics</option>
+                            <option>Chemistry</option>
+                            <option>Social Sciences</option>
+                            <option>Managerial Sciences</option>
+                        </select>
+                      </div>
+                        <div class="form-group col-md-3">
+                        <label for="Gender">Gender</label>
+                        <select name="gender" id="Gender" class="form-control">
+
+                            <option hidden>Choose</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Transgender</option>
+                        </select>
+                      </div>
+
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                      </div>
+                      <div class="form-group col-md-6">
+                       <button type="reset" class="btn btn-danger">Reset</button>
+                       </div>
+                   </div>
+              </form>
+     
+
+          </div>
+        </div>
+      
+  
+             
+           </div> 
+        </div>
+    </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <script>
+      $(document).ready(function(){
+      $('#sidebarCollapse').on('click',function(){
+        $('#sidebar').toggleClass('active');
+      });
+    });  
+  </script>
+    
+    
+    
+    
+    
+  </body>
+</html>

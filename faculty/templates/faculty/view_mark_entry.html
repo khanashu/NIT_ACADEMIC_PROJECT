@@ -1,0 +1,133 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Grade card</title>
+    <link rel="stylesheet" href="{% static 'faculty/gradecard.css' %}">
+  </head>
+  <body>
+      
+      <div class="header">
+          <div id="image">
+              <img src="{% static 'faculty/logo.png' %}" alt="logo">
+          </div>
+          <div class="title">
+                  <ul style="list-style-type:none;">
+                          <li style="font-size: 16px;">
+                             <b> राष्ट्रीय प्रौद्योगिकी संस्थान नागालैंड</b>
+              
+                          </li>
+                          <li style="font-size:16px;">
+                            <strong> NATIONAL INSTITUTE OF TECHNOLOGY NAGALAND </strong>
+                          </li>
+                          <li>
+                           (An Institue of National Importance under MHRD , Government of India)
+                            </li>
+                            <li style="font-size:16px;">
+                             <strong>Chumukedima, Dimapur, Nagaland - 797103 </strong>
+                            </li><br>
+                          
+                            <li style="font-size:17px;">
+                                <strong>Ph.D Programme </strong>
+                               </li> <li style="font-size:17px;">
+                                  <strong>Mark-Entry Report </strong>
+                                 </li>
+                        </ul>
+                   
+          </div>
+      </div>
+      <div class="row ">
+          <div class="table">
+              <table>
+                  <tr>
+                        <th colspan="2">Name of the Faculty</th>
+                        <th colspan="4">{{ profile_details.teacher_name }}</th>
+                        <th colspan="1">Course code</th>
+                        <th colspan="1">{{ profile_details.course_id }}</th>
+                        <th colspan="1">Month and Year of Examination</th>  
+                        <th colspan="1">{{ profile_details.month }} {{ profile_details.year }}</th>
+                     
+                    </tr>
+                  
+                    <tr>
+                            <th colspan="2">employee code</th>
+                            <th colspan="2">{{ profile_details.employee_code }}</th>
+                            <th colspan="2">Course Name.</th>  
+                            <th colspan="4">{{ profile_details.course_name }}</th>
+                            
+                        
+                        
+                    </tr>
+                    <tr>
+                        <th colspan="2">Registration no</th>
+                        <th colspan="3">Student name</th>
+                        <th colspan="1">Mid sem marks</th>
+                        <th >End sem marks</th>  
+                        <th>Total marks</th>
+                        <th>Grade  </th>
+                        <th>Approve Status</th>
+                    </tr>
+                    {% for key, value in view_entry.items %}
+                    {% ifequal key 'students' %}
+                    {% for student in value %}
+                    <tr >
+                      <th id="remove" colspan="2">{{ student.regno }} </th>
+                      <th id = "remove"colspan="3">{{ student.name }}</th>
+                      <th id = "remove"colspan="1">{{ student.midsem }}</th>
+                      <th id = "remove">{{ student.endsem }}</th>
+                      <th id = "remove">{{ student.totalmarks }}</th>
+                      <th id = "remove"> {{ student.grade}}</th>
+                      <th id="remove"> {{ student.approve }}</th>
+                    
+                    </tr>
+                   
+                    {% endfor %}
+                    {% endifequal %}
+                    {% endfor %}         
+                    <tr >
+                            <th colspan="2">  </th>
+                            <th colspan="3"> </th>
+                            <th colspan="1"></th>
+                            <th ></th>
+                            <th></th>
+                            <th ></th>
+                            <th > </th>
+                          
+                          </tr>
+          
+              </table>
+          </div>
+      </div>
+    
+      
+      <div class="bottom ">
+      
+          <div class="bottom ">
+      
+              <div class="left">
+                      <h5><strong>Associate Dean(Academic)</strong></h5>
+                   </div>
+          
+                  
+                 <div class = "right" >
+                  <h5><strong>Faculty</strong></h5>
+         
+              </div>
+     
+      
+     
+      </div>
+  
+              
+          
+ 
+  
+ 
+  </div>
+
+    
+    
+    
+    
+  </body>
+</html>

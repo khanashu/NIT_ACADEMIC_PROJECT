@@ -1,0 +1,52 @@
+
+ .col-md-1 {
+ 	
+	
+	padding: 15px;
+
+ }
+
+ .col-md-11{
+ 	
+ 	
+	padding: 15px;
+ 	
+ 	
+ }
+ 
+
+ .addheader{
+ 	background:#FEA1F6;
+ }
+#common{
+       
+        min-height: 600px;     
+         }
+
+         
+
+.btn-primary{
+
+        border-radius: 5px;
+      	width: 100%;
+        background: #2CABF3;
+         }
+
+ .btn-danger{
+           border-radius: 5px;
+           width: 100%;
+           background: #F75050;
+           
+           
+
+         
+        
+      }
+.arrange{
+margin-left: 10px;
+margin-right: 10px;
+width: 100%
+}
+.form-row{
+	margin: 40px;
+}

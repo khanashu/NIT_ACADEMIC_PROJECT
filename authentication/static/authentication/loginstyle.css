@@ -1,0 +1,97 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: url(regback.jpg);
+	background-size: cover;
+	background-position: center;
+	font-family: sans-serif;
+}
+.login_box{
+	width: 320px;
+	height: 420px;
+	background: rgba(0,0,0,0.5);
+	color: #fff;
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%,-50%);
+	box-sizing: border-box;
+	padding: 70px 30px;
+	border-radius: 20px;
+
+}
+.login{
+	width: 100px;
+	height: 100px;
+	border-radius: 200%;
+	position: absolute;
+	top: -50px;
+	left: calc(50% - 50px);
+
+}
+h1{
+	margin: 0;
+	padding: 0 0 20px;
+	text-align: center;
+	font-size: 22px;
+}
+.login_box p{
+	margin: 0;
+	padding: 0l;
+	font-weight: bold ;
+}
+.login_box input{
+	width: 100%;
+	margin-bottom: 20px;
+
+}
+.login_box input[type ="text"],input[type="password"]
+{
+	border: none;
+	border-bottom: 1px solid #fff;
+	background:transparent;
+	outline: none;
+	height: auto;
+	color: #fff;
+	font-size:16px;
+
+}
+.login_box input[type ="text"],input[type="password"]:focus
+{
+	background-color: transparent
+}
+
+
+
+.login_box input[type="Submit"]
+{
+	border:none;
+	outline: none;
+	height: 40px;
+	background: #66FF33;
+	opacity: 0.9;
+	color:#fff;
+	font-size: 18px;
+	border-radius: 100px;
+
+}
+.login_box input[type="Submit"]:hover
+{
+	cursor: pointer;
+	background:#99CCFF;
+	color:black;
+}
+.login_box a{
+	text-decoration: none;
+	font-size: 15px;
+	line-height: 30px;
+	font-family: Times New Roman;
+	color: black;
+	font-weight: 5px;
+}
+
+.login_box a:hover
+{
+	color: black;
+	
+}

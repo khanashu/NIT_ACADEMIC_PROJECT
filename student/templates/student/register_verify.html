@@ -1,0 +1,162 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Registration</title>
+    <style type="text/css">
+      body{
+        background-image: url({% static 'student/try.jpg' %});
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-style: none;
+
+      }
+      .register_box{
+        margin-top: 60px;
+        opacity: 0.9;
+        height: 100%;
+        width: 80%;
+
+
+
+      }
+      #form{
+        background-color: #e3f2fd;
+        min-height: 700px;   
+        border-radius: 10px;  
+         }
+
+         .Registration{
+          font-size: 55px;
+          font-family: Bookman;
+          font-weight: 300;
+          border-bottom-width: 3px;
+
+          border-bottom-style: ridge;
+
+         }
+
+         .btn-primary{
+
+          border-radius: 5px;
+          padding-left: 10px;
+          width: 49%;
+         }
+
+         .btn-danger{
+           border-radius: 5px;
+          padding-left: 10px;
+          width: 50%;
+
+         }
+    </style>
+  </head>
+  <body>
+        {% block content %}
+       {% if messages %}
+                <ul>
+                    {% for message in messages %}
+
+                           <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                              <strong>{{ message }}</strong>
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                    {% endfor %}
+                </ul>
+        {% endif %}
+      <div class="register_box">
+        <div class ="row justify-content-center">
+          <div class="col-md-6 " id="form">
+            <center> <b class ="Registration"> Please verify you details before submission </b></center>
+            <br>
+
+            <form method="post" action="{% url 'studentprofile_form_submission' %}">
+                    {% csrf_token %}
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label for="firstname">First Name</label>
+                    <input name="first_name" type="text" class="form-control" id="firstname" value="{{ profile_details.first_name }}"readonly>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="lastname">Last Name</label>
+                    <input name="last_name" type="text" class="form-control" id="lastname" value="{{ profile_details.last_name }}"readonly>
+                  </div>
+                 </div>
+                <div class="form-group">
+                     <label for="inputEmail">Email</label>
+                      <input name="email" type="email" class="form-control" id="inputEmail"value="{{ profile_details.email }}"readonly>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                   <label for="inputPassword4">Password</label>
+                    <input name="password" type="text" class="form-control" id="inputPassword4" value="{{ profile_details.password }}"readonly>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="RePassword4">Retype Password</label>
+                    <input name="re_password" type="text" class="form-control" id="RePassword4" value="{{ profile_details.repassword }}"readonly>
+                  </div>
+                </div>
+                <div class="form-row ">
+                <div class="form-group col-md-4 ">
+                  <label for="registration_no"> Registration Number</label>
+                  <input name="registration_no" type="text" class="form-control" id="registration_no" value="{{ profile_details.registration_no }}"readonly>
+                </div>
+                 <div class="form_group col-md-4 ">
+                 	<label for="year_of_reg">Year of Registration</label>
+                 	<input name="year_of_reg" type="text" class="form-control" id="year_of_reg" value="{{ profile_details.yearofreg }}"readonly>
+                 </div>
+                    <div class="form-group col-md-4">
+                    <label for="month_of_reg">Month of Registration</label>
+                    <input type="text" name="month_of_reg" id="month_of_reg" class="form-control" value="{{ profile_details.monthofreg }}"readonly>
+                     
+                  </div>
+               
+              </div>
+                <div class="form-row justify-content-around">
+                  <div class="form-group col-md-4 ">
+                    <label for="Dateofbirth">Date Of Birth</label>
+                    <input name="dateofbirth" type="date" class="form-control" id="Dateofbirth" value="{{ profile_details.dateofbirth }}"readonly>
+
+                   
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="Branch">Branch</label>
+                    <input name="branch" type="text" id="Branch" class="form-control" value="{{ profile_details.branch }}"readonly>
+                       
+                  </div>
+                    <div class="form-group col-md-4 ">
+                    <label for="Gender">Gender</label>
+                    <input type="text"  name="gender" id="Gender" class="form-control" value="{{ profile_details.gender}}"readonly>
+                      
+                        
+                  </div>
+                
+                </div>
+                  
+                <button name="accept" type="submit" class="btn btn-primary">Submit</button>
+                   <button  name="reject" type="submit" class="btn btn-danger">Reject</button>
+              </form>
+     
+
+          </div>
+        </div>
+      </div>
+        {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
