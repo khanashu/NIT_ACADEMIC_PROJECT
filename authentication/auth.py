@@ -19,7 +19,7 @@ def login(request):
         except StudentProfile.DoesNotExist:
             messages.error(request ,'Invalid Username! Try Again')
             return redirect('login')
-    elif len(username_entered) == 8:
+    elif len(username_entered) == 7:
 
         try:
             user_instance = DeanUser.objects.get(username=username_entered)

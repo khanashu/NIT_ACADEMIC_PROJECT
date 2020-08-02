@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="{% static 'student/homestyle.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="{% static 'student/student_home.css' %}">
-    <title>bootstrap 4 sidebar</title>
+    
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -55,7 +56,7 @@
    				<a href="{% url 'student_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+          <a href="{% url 'studenthome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>
@@ -147,10 +148,10 @@
                     <select name="year_of_course" id="year_of_course" class="form-control">
                       
                         <option hidden>Select Year</option>
-                        <option>2017-2018</option>
-                        <option>2018-2019</option>
-                        <option>2019-2020</option>
-                        <option>2020-2021</option>
+                        {% for year in year_list %}
+                        <option>{{ year }}</option>
+                        {% endfor %}
+                     
                        
 
                     </select>

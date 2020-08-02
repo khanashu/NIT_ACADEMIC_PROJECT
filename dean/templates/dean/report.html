@@ -28,7 +28,7 @@
                             <li style="font-size:17px;">
                                 <strong>Ph.D Programme </strong>
                                </li> <li style="font-size:17px;">
-                                  <strong>Report of {{ branch }} of batch of {{ yearofreg }}</strong>
+                                  <strong>Report of {{ branch }} of session {{ exam }} of {{ yearofreg }} </strong>
                                  </li>
                         </ul>
                    
@@ -41,24 +41,23 @@
                     <tr class="tableheader">
                         
                         <th colspan="1">Serial no</th>
-                        <th colspan="3" class="tablecolor">Department</th>
-                        <th colspan="3">Name</th>  
+                        <th colspan="2" > Name </th>
+                       
                         <th colspan="2">Registration no</th>
-                        <th>Gender</th>
-                        <th colspan="2">DOB</th>
+                        
+                        
                         {% for my in range %}
                         <th colspan="1"class="tablecolorsem">Semester</th>
                         <th>Course code</th>
                         
                         <th colspan="3">Course Name</th>
-                        <th>Credits Reg</th>
+                        
                         <th>Grade</th>
-                        <th>Grade Point  </th>
-                        <th colspan="3">Month & Year of Examination</th>
+                        
+                        
                        
                         {% endfor %}
-                        <th class="tablecolorgreen"> Total Credits Reg</th>
-                        <th class="tablecolorgreen">Total Credits Earned</th>
+                        
                         <th class="tablecolorgreen"> CGPA</th>
                        
                     </tr>
@@ -68,23 +67,23 @@
                     <tr >
                        
                         <th colspan="1">{{ student.serialno }}</th>
+                        <th colspan="2">{{ student.first_name }} {{ student.last_name }}</th>
                         
-                        <th colspan="3" class="tablecolor">{{ student.branch }}</th>
-                        <th colspan="3">{{ student.first_name }}{{ student.last_name }}</th>  
+                       
                         <th colspan="2">{{ student.regno }}</th>
-                        <th>{{ student.gender }}</th>
-                        <th colspan="2">{{ student.dob }}</th>
+                        
+                        
                         
                         {% for student_grade in student.grades %}
                         {% if student_grade %}
                         <th colspan="1" class="tablecolorsem">{{ student_grade.semester }}</th>
                         <th>{{ student_grade.course_id }}</th>
                         <th colspan="3">{{ student_grade.course_name }}</th>
-                        <th >{{ student_grade.credits }}</th>
+                        
                          
                         <th>{{ student_grade.grade }}</th>
-                        <th>{{ student_grade.gradepoint }} </th>
-                        <th colspan="3">{{ student_grade.month}} {{ student_grade.year }}</th>
+                        
+                        
                         {% else %}
                         <th colspan="1" class="tablecolor"></th>
                         <th class="tablecolor"></th>
@@ -96,8 +95,7 @@
                         <th colspan="3"class="tablecolor"></th>
                         {% endif %}
                         {% endfor %}
-                        <th class="tablecolorgreen">{{ student.total_reg }}</th>
-                        <th class="tablecolorgreen">{{ student.total }}</th>
+                       
                         <th class="tablecolorgreen">{{ student.cgpa }}</th>
 
                        

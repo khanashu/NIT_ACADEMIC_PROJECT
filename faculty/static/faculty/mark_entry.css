@@ -236,6 +236,12 @@ body {
 .sem{
 	background-color: #AFDFE2;
 }
+.view_mark{
+  background-color: chartreuse;
+}
+.available{
+  background-color: crimson;
+}
 .box_size{
   width: 30%;
 }

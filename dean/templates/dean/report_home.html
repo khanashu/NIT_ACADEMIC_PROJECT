@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="{% static 'dean/admin_home.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>bootstrap 4 sidebar</title>
+    
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -32,7 +33,7 @@
        			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                   <a href="{% url 'changepassword' %}">Change Password</a>
+                   <a href="{% url 'changepassworddean' %}">Change Password</a>
                 </li>
 
                 <li>
@@ -54,10 +55,13 @@
               <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
           </li>
              <li>
-                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+                 <a href="{% url 'grade_home' %}" >Grade Card</a>
              </li>
              <li>
                  <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+            <li>
+                 <a href="{% url 'report_home' %}" >Report Generation</a>
              </li>
      	</ul>
    		
@@ -67,7 +71,7 @@
    				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+          <a href="{% url 'deanhome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>
@@ -85,26 +89,8 @@
   <!--<a class="navbar-brand" href="#">Navbar</a> -->
   
 </nav>
-{% if messages %}
-                <ul>
-                    {% for message in messages %}
-                     <div class="alert alert-secondary" role="alert">
-                      <h4 class="alert-heading">Sorry!!</h4>
-                         <p> {{ message }} </p>
-                    </div>
-                    {% endfor %}
-                </ul>
-        {% endif %}
-        {% if success %}
-                <ul>
 
-                     <div class="alert alert-success" role="alert">
-
-                         <p><h4>{{ success }}</h4> </p>
-                    </div>
-
-                </ul>
-        {% endif %}
+     
         {% if error %}
                 <ul>
 
@@ -118,32 +104,33 @@
   <div class="row justify-content-center">
     <div class="column">
      <div class="card">
-       <h4 class="card-header evaluation_home">Please enter the Session and Branch </h4>
+       <h4 class="card-header report_home">Please enter the Session and Branch </h4>
       <div class="card-body">
         <h5 class="card-title">
-            <form method="post" action="{% url 'report_sub' %}">
+            <form method="post" action="{% url 'report_sub' %}" target="_blank">
                     {% csrf_token %}
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-fill bd-highlight">
 
-                  <select name="year" class="form-control ">
+                  <select name="year" class="form-control " required>
                       
                         <option hidden> Year</option>
-                        <option>2017-2018</option>
-                        <option>2018-2019</option>
-                        <option>2019-2020</option>
-                        <option>2020-2021</option>
+                        {% for year in year_list %}
+                        <option>{{ year }}</option>
+                        {% endfor %}
                         
                         
                     </select>
             </div>
             <div class="p-2 flex-fill bd-highlight">
-                    <select name="department" id="department" class="form-control">
+                    <select name="department" id="department" class="form-control" required>
 
                             <option hidden>Department</option>
                             <option>Electrical and Electronics Engineering</option>
                             <option>Electrical and Communication Engineering</option>
                             <option>Computer Science and Engineering</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Civil Engineering</option>
                             <option>Electronics and Instrumentation Engineering</option>
                             <option>Science and Humanities</option>
                             <option>Mathematics</option>
@@ -154,7 +141,7 @@
                     </select>
             </div>
             <div class="p-2 flex-fill bd-highlight">
-              <select name="semester" id="semester" class="form-control">
+              <select name="semester" id="semester" class="form-control" required>
 
                       <option hidden>Semester</option>
                       <option>Odd Semester</option>

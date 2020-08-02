@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'faculty/mark_entry.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 
-    <title>bootstrap 4 sidebar</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
     <script >
       function addmarks(midsem_id, endsem_id, total_id)
       {
@@ -67,7 +67,7 @@
           <a href="{% url 'faculty_logout' %}" class="logout">Log Out</a>
         </li>
         <li>
-          <a href="#" class="article">Contact us</a>
+          <a href="{% url 'facultyhome' %}" class="article">Developed by Ashu Khan</a>
         </li>
       </ul>
     </nav>
@@ -99,7 +99,7 @@
               </div>
             <div class="p-2 flex-fill bd-highlight">
           
-                 <input  name="year" type="text" class="form-control " id="year" value="{{year}}" readonly>
+                 <input  name="year" type="text" class="form-control " id="year" value="{{ year }}" readonly>
                   
             </div>
              <div class="p-2 flex-fill bd-highlight">
@@ -109,7 +109,7 @@
               </div>
             <div class="p-2 flex-fill bd-highlight">
              
-               <input  name="semester" type="text" class="form-control " id="semester" value="{{semester}}" readonly>
+               <input  name="semester" type="text" class="form-control " id="semester" value="{{ semester }}" readonly>
             </div>
            <div class="p-2 flex-fill bd-highlight">
               <h4><label for="course_code">Course code</label></h4>             
@@ -151,12 +151,12 @@
                                         {% for student in students %}
                                         <tr>
                                            
-                                          <td><input type="text" name="marks_reg{{ student.registration_no }}" class="form-control" value="{{ student.registration_no }}" readonly </td>
+                                          <td><input type="number" name="marks_reg{{ student.registration_no }}" class="form-control" value="{{ student.registration_no }}" readonly </td>
                                       
-                                          <td><input  type="text"id="marks_midsem{{ student.registration_no }}" name="marks_midsem{{ student.registration_no }}"  class="form-control"  > </td>
-                                          <td ><input  type="text"id="marks_endsem{{ student.registration_no }}" class="form-control"  name="marks_endsem{{ student.registration_no }}"  > </td>
-                                          <td ><input  type="text" id="marks_totalmarks{{ student.registration_no }}" class="form-control"  name="marks_totalmarks{{ student.registration_no }}" value="" readonly/> </td>
-                                          <td ><input type="button" class="btn btn-primary" value="click HERE" onclick="addmarks('marks_midsem{{ student.registration_no }}','marks_endsem{{ student.registration_no }}','marks_totalmarks{{ student.registration_no }}')"> </td>
+                                          <td><input  type="number"id="marks_midsem{{ student.registration_no }}" name="marks_midsem{{ student.registration_no }}"  class="form-control" max="50" required > </td>
+                                          <td ><input  type="number"id="marks_endsem{{ student.registration_no }}" class="form-control"  name="marks_endsem{{ student.registration_no }}" max="100" required> </td>
+                                          <td ><input  type="number" id="marks_totalmarks{{ student.registration_no }}" class="form-control"  name="marks_totalmarks{{ student.registration_no }}" value="" readonly required> </td>
+                                          <td ><input type="button" class="btn btn-primary" value="Click Here" onclick="addmarks('marks_midsem{{ student.registration_no }}','marks_endsem{{ student.registration_no }}','marks_totalmarks{{ student.registration_no }}')"> </td>
                                      
                                           <td ><input  type="text" class="form-control"  name="marks_grade{{ student.registration_no }}"  > </td>
                                           

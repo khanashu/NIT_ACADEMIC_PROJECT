@@ -262,7 +262,14 @@ background-color:#0CEC30;
 background-color:#7675B1;
 font-size: 34px;
 }
-
+.report_home
+{
+	background-color: #D0338D;
+}
+.grade_home
+{
+	background-color: greenyellow;
+}
 th, td {
 	padding: 3px;
 	text-align:center;

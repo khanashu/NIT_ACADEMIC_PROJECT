@@ -30,16 +30,16 @@
 		<form method="post" action="{% url 'login_submission' %}">
 			{% csrf_token %}
 			<p>Student or Employee or Dean</p>
-			<input type="text" name="username" placeholder="Enter Username">
+			<input type="text" name="username" placeholder="Enter Username" autocomplete="off" required>
 			<br>
 			<p>Password</p>
 			
-			<input type="Password"  name="password" placeholder="Enter Password">
+			<input type="Password"  name="password" placeholder="Enter Password" required>
 			<br>
 
-			<input type ="Submit" name=""
-			value="Login">
-			<a href=><b>Lost your Password?,</b></a><br>
+			<input type ="Submit" name=""value="Login">
+			<a href=""><b>Forgot Password ?Contact Data center</b></a><br>
+
 			<a href="{% url 'register' %}"><b>Don't have an account?Register here</b></a><br>
 			
 		</form>

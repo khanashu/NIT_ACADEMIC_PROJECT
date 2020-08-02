@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'dean/admin_home.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>bootstrap 4 sidebar</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -32,7 +32,7 @@
        			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                   <a href="{% url 'changepassword' %}">Change Password</a>
+                   <a href="{% url 'changepassworddean' %}">Change Password</a>
                 </li>
 
                 <li>
@@ -54,10 +54,13 @@
               <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
           </li>
              <li>
-                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+                 <a href="{% url 'grade_home' %}" >Grade Card</a>
              </li>
              <li>
                  <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+            <li>
+                 <a href="{% url 'report_home' %}" >Report Generation</a>
              </li>
      	</ul>
    		
@@ -67,7 +70,7 @@
    				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+          <a href="{% url 'deanhome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>

@@ -12,7 +12,25 @@
      <link rel="stylesheet" href="{% static 'dean/addfaculty.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>add faculty</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
+    <script>
+        function password_test()
+        {
+            var pass = document.getElementById("password").value;
+            var re_pass = document.getElementById("re_password").value;
+            if(pass == re_pass)
+            {
+                return true;
+            }
+            else
+            {   
+                alert("Passwords donot match!!")
+                document.getElementById("password").style.borderColor="red";
+                document.getElementById("re_password").style.borderColor="red";
+                return false;
+            }
+        }
+    </script>
   </head>
   <body>
    
@@ -32,7 +50,7 @@
        			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                  <a href="{% url 'changepassword' %}">Change Password</a>
+                  <a href="{% url 'changepassworddean' %}">Change Password</a>
                 </li>
 
                <li>
@@ -54,10 +72,13 @@
               <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
           </li>
              <li>
-                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+                 <a href="{% url 'grade_home' %}" >Grade Card</a>
              </li>
              <li>
                  <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+            <li>
+                 <a href="{% url 'report_home' %}" >Report Generation</a>
              </li>
      	</ul>
 
@@ -67,7 +88,7 @@
    				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+          <a href="{% url 'deanhome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>
@@ -126,38 +147,38 @@
                       <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for="firstname">First Name</label>
-                          <input name="first_name" type="text" class="form-control" id="firstname" placeholder="First Name">
+                          <input name="first_name" type="text" class="form-control" id="firstname" placeholder="First Name" autocomplete="off" required>
                         </div>
                       <div class="form-group col-md-6">
                         <label for="lastname">Last Name</label>
-                          <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Last Name">
+                          <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Last Name" autocomplete="off" required>
                       </div>
                      </div>
                     <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="inputEmail">Email</label>
-                      <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+                      <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off" required>
                     </div>
                     <div class="form-group col-md-6">
                       <label for="Empcode">Employee Code</label>
-                      <input name="employee_code" type="text" class="form-control" id="Empcode" placeholder="Employee Code">
+                      <input name="employee_code" type="number" class="form-control" id="Empcode" placeholder="Employee Code" autocomplete="off"required>
                     </div>
                   </div>
                     <div class="form-row">
                       <div class="form-group col-md-6">
                        <label for="inputPassword4">Password</label>
-                        <input name="password" type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                        <input name="password" type="password" class="form-control" id="password" placeholder="Password">
                       </div>
                       <div class="form-group col-md-6">
                         <label for="RePassword4">Retype Password</label>
-                        <input name="re_password" type="password" class="form-control" id="RePassword4" placeholder="Retype Password">
+                        <input name="re_password" type="password" class="form-control" id="re_password" placeholder="Retype Password">
                       </div>
                     </div>
 
                     <div class="form-row">
                       <div class="form-group col-md-3">
                         <label for="Dateofbirth">Date Of Birth</label>
-                        <input name="dob" type="date" class="form-control" id="Dateofbirth">
+                        <input name="dob" type="date" class="form-control" id="Dateofbirth" max="{{date}}">
                       </div>
                       <div class="form-group col-md-6">
                         <label for="department">Department</label>
@@ -166,7 +187,8 @@
                             <option hidden>Choose</option>
                             <option>Electrical and Electronics Engineering</option>
                             <option>Electrical and Communication Engineering</option>
-
+                            <option>Mechanical Engineering</option>
+                            <option>Civil Engineering</option>
                             <option>Computer Science and Engineering</option>
                             <option>Electronics and Instrumentation Engineering</option>
                             <option>Science and Humanities</option>
@@ -191,7 +213,7 @@
                     </div>
                     <div class="form-row">
                       <div class="form-group col-md-6">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                          <input type="submit" class="btn btn-primary"  onclick="return password_test();">
                       </div>
                       <div class="form-group col-md-6">
                        <button type="reset" class="btn btn-danger">Reset</button>

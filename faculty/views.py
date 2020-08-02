@@ -5,17 +5,25 @@ from .models import MarksEntry,FacultyNotifications
 from django.contrib import messages
 from student.models import StudentCourse,StudentProfile
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 
 def index(request):
     username = request.session.get('username')
     teacher_profile = AddFaculty.objects.get(employee_code=username)
     accepted=FacultyNotifications.objects.filter(employee_code=username,accepted=1)
     rejected=FacultyNotifications.objects.filter(employee_code=username,accepted=0)
+   
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-2
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    
     if accepted.count()==0 and rejected.count()==0:
         message="No new notifications are there to show"
-        return render(request, 'faculty/facultyhome.html',{'teacher': teacher_profile, 'accepted': accepted, 'rejected': rejected,'message':message})
+        return render(request, 'faculty/facultyhome.html',{'teacher': teacher_profile, 'accepted': accepted, 'rejected': rejected,'message':message,'year_list':year_list})
     else:
-        return render(request, 'faculty/facultyhome.html',{'teacher':teacher_profile,'accepted':accepted,'rejected':rejected})
+        return render(request, 'faculty/facultyhome.html',{'teacher':teacher_profile,'accepted':accepted,'rejected':rejected,'year_list':year_list})
 
 def faculty_logout(request):
     username=request.session.get('username')
@@ -26,17 +34,21 @@ def last_date_added(request):
     year = request.POST["year"]
     semester = request.POST["semester"]
 
-
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-2
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     username = request.session.get('username')
     teacher_profile = AddFaculty.objects.get(employee_code=username)
     try:
         last_date_given = LastDate.objects.get(year=year, semester=semester)
         last_date=last_date_given.date.strftime("%d/%m/%Y")
-        return render(request, 'faculty/facultyhome.html', {'teacher': teacher_profile, 'last_date': last_date})
+        return render(request, 'faculty/facultyhome.html', {'teacher': teacher_profile, 'last_date': last_date,'year_list':year_list})
 
     except ObjectDoesNotExist:
         last = "Last date of mark submission will be updated soon!!"
-        return render(request, 'faculty/facultyhome.html', {'teacher': teacher_profile, 'last': last})
+        return render(request, 'faculty/facultyhome.html', {'teacher': teacher_profile, 'last': last,'year_list':year_list})
 
 def course_assigned(request):
     year = request.POST["year"]
@@ -45,18 +57,27 @@ def course_assigned(request):
     teacher_assign = AssignTeacher.objects.filter(employee_code=username,year_of_assign=year,semester=semester)
     obj = teacher_assign.count()
     teacher_profile = AddFaculty.objects.get(employee_code=username)
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-2
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     if obj ==0:
         messages.error(request, 'No courses have been allotted according to the given year and semester')
-        return  render (request,'faculty/facultyhome.html',{'teacher':teacher_profile})
+        return  render (request,'faculty/facultyhome.html',{'teacher':teacher_profile,'year_list':year_list})
     else:
 
         messages.success(request,'The allotted courses are as follows')
 
-        return render (request,'faculty/facultyhome.html',{'teacher_assigned':teacher_assign,'teacher':teacher_profile})
+        return render (request,'faculty/facultyhome.html',{'teacher_assigned':teacher_assign,'teacher':teacher_profile,'year_list':year_list})
 
 def mark_entry_home(request):
-
-        return render(request, 'faculty/mark_entry_home.html')
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-3
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request, 'faculty/mark_entry_home.html',{'year_list':year_list})
 
 def mark_entry_year_sub(request):
     year = request.POST["year"]
@@ -64,10 +85,14 @@ def mark_entry_year_sub(request):
     username = request.session.get('username')
     teacher_assign = AssignTeacher.objects.filter(employee_code=username, year_of_assign=year, semester=semester)
     obj = teacher_assign.count()
-
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-3
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     if obj == 0:
         messages.error(request, 'No courses have been allotted according to the given year and semester')
-        return render(request, 'faculty/mark_entry_home.html',{} )
+        return render(request, 'faculty/mark_entry_home.html',{'year_list':year_list} )
     else:
 
         return render(request, 'faculty/mark_entry_selection.html', {'teacher_assigned': teacher_assign})
@@ -75,12 +100,16 @@ def mark_entry_year_sub(request):
 def mark_entry(request):
     course_info = request.POST["course_info"]
     course_id = str(course_info)[:6]
-    year = str(course_info)[6:15]
-    semester =str(course_info)[15:]
-
+    year = str(course_info)[6:10]
+    semester =str(course_info)[10:]
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-3
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     if MarksEntry.objects.filter(course_id=course_id,year=year,semester=semester).exists():
             error ='Marks entry is submitted for this course already!!Please try again with different course'
-            return render(request,"faculty/mark_entry_home.html",{'error':error})
+            return render(request,"faculty/mark_entry_home.html",{'error':error,'year_list':year_list})
     else:
         course_names = AddCourse.objects.get(course_id=course_id)
         course_name = course_names.course_name
@@ -89,16 +118,21 @@ def mark_entry(request):
         obj = students.count()
         if obj ==0:
             messages.error(request, 'No student has registered for this course')
-            return render(request,'faculty/mark_entry_home.html',)
+            return render(request,'faculty/mark_entry_home.html',{'year_list':year_list})
         else:
             return render(request,'faculty/mark_entry.html',{'students':students,'course_id':course_id,'year':year,'semester':semester})
 
 
 def save_marks(request):
         year,semester,course_id,error= save_marks_in_db(parse_mark_entry(request.POST))
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_start=year_end-3
+        year_list=list()
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
         if error==0:
             error="The mark entry is wrong as either mid sem or end sem mark entry is wrong!!"
-            return render(request, 'faculty/mark_entry_home.html', {'error': error})
+            return render(request, 'faculty/mark_entry_home.html', {'error': error,'year_list':year_list})
         else:
             notifications=DeanNotifications.objects.create(year=year,course_id=course_id,semester=semester)
             notifications.save()
@@ -108,7 +142,9 @@ def save_marks(request):
             except:
                 pass
             success='Marks have been submitted for '+course_id+' for '+semester+ ' of session ' + year
-            return render(request,'faculty/mark_entry_home.html',{'success':success})
+            year_end=int(datetime.now().date().strftime("%Y"))
+    
+            return render(request,'faculty/mark_entry_home.html',{'success':success,'year_list':year_list})
 
 
 def parse_mark_entry(post_array):
@@ -128,10 +164,9 @@ def parse_mark_entry(post_array):
     single_student_mark_entered = dict()
     for student in students:
         current_roll=student.registration_no.registration_no
-
-
-        single_student_mark_entered['reg_no'] = post_array.get('marks_reg' + current_roll)
+        print(current_roll)
         single_student_mark_entered['error'] = 0
+        single_student_mark_entered['reg_no'] = post_array.get('marks_reg' + current_roll)
         single_student_mark_entered['midsem'] = int(post_array.get('marks_midsem' + current_roll))
         single_student_mark_entered['endsem'] = int(post_array.get('marks_endsem' + current_roll))
         if single_student_mark_entered['midsem'] > 50 or single_student_mark_entered['endsem'] > 100:
@@ -183,7 +218,12 @@ def change_password_form(request):
         return render(request, "faculty/changepassword.html", {'error': error})
 
 def view_mark_home(request):
-    return render(request, 'faculty/view_mark_home.html')
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=2016
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request, 'faculty/view_mark_home.html',{'year_list':year_list})
 
 def view_mark_year_sub(request):
     year = request.POST["year"]
@@ -191,10 +231,15 @@ def view_mark_year_sub(request):
     username = request.session.get('username')
     teacher_assign = AssignTeacher.objects.filter(employee_code=username, year_of_assign=year, semester=semester)
     obj = teacher_assign.count()
-
+    
     if obj == 0:
-        messages.error(request, 'No courses have been allotted according to the given year and semester')
-        return render(request, 'faculty/mark_entry_home.html',{} )
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_start=year_end-3
+        year_list=list()
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
+        messages.error(request, 'No mark entry submitted according to the given year and semester')
+        return render(request, 'faculty/view_mark_home.html',{'year_list':year_list} )
     else:
 
         return render(request, 'faculty/view_mark_selection.html', {'teacher_assigned': teacher_assign})
@@ -202,9 +247,13 @@ def view_mark_year_sub(request):
 def view_mark(request):
     course_details = request.POST["course_details"]
     course_id = str(course_details)[:6]
-    year = str(course_details)[6:15]
-    semester = str(course_details)[15:]
-
+    year = str(course_details)[6:10]
+    semester = str(course_details)[10:]
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_start=year_end-3
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     mark_objects=MarksEntry.objects.filter(course_id=course_id, year=year, semester=semester)
     if mark_objects.count()>0:
         students = MarksEntry.objects.filter(course_id=course_id, year=year, semester=semester)
@@ -213,7 +262,7 @@ def view_mark(request):
 
     else:
         error = 'Marks entry is not submitted for this course !!Please try again with different course'
-        return render(request, "faculty/view_mark_home.html", {'error': error})
+        return render(request, "faculty/view_mark_home.html", {'error': error,'year_list':year_list})
 
 
 def view_mark_entry(request):
@@ -266,7 +315,8 @@ def update_details(request):
     personal_details=AddFaculty.objects.get(employee_code=username)
     print(personal_details.dob)
     dob=personal_details.dob.strftime("%Y-%m-%d")
-    return render(request,'faculty/update_details.html',{'personal_details':personal_details,'dob':dob})
+    date=datetime.now().date().strftime("%Y-%m-%d")
+    return render(request,'faculty/update_details.html',{'personal_details':personal_details,'dob':dob,'date':date})
 
 def update_details_sub(request):
 

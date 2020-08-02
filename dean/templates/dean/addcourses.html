@@ -12,7 +12,7 @@
       <link rel="stylesheet" href="{% static 'dean/addcourses.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>add courses</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -32,7 +32,7 @@
        			<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">User Management</a>
               <ul class="collapse list-unstyled" id="pageSubmenu">
                 <li>
-                   <a href="{% url 'changepassword' %}">Change Password</a>
+                   <a href="{% url 'changepassworddean' %}">Change Password</a>
                 </li>
 
                 <li>
@@ -54,10 +54,13 @@
               <a href="{% url 'evaluation_home' %}">Evaluation of marks submitted</a>
           </li>
              <li>
-                 <a href="{% url 'grade_card_generate' %}" >Grade Card</a>
+                 <a href="{% url 'grade_home' %}" >Grade Card</a>
              </li>
              <li>
                  <a href="{% url 'last_date_mark' %}" >Assign Last Date</a>
+             </li>
+            <li>
+                 <a href="{% url 'report_home' %}" >Report Generation</a>
              </li>
      	</ul>
 
@@ -67,7 +70,7 @@
    				<a href="{% url 'dean_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+   				<a href="{% url 'deanhome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>
@@ -137,11 +140,11 @@
                       <div class="form-row">
                         <div class="form-group col-md-2">
                           <label for="courseid">Course Id</label>
-                          <input name="course_id" type="text" class="form-control" id="courseid" placeholder="Enter the id">
+                          <input name="course_id" type="text" class="form-control" id="courseid" placeholder="Enter the id" required autocomplete="off">
                         </div>
                       <div class="form-group col-md-10">
                         <label for="coursename">Course Name</label>
-                          <input name="course_name" type="text" class="form-control" id="coursename" placeholder="Enter the name of course">
+                          <input name="course_name" type="text" class="form-control" id="coursename" placeholder="Enter the name of course" required autocomplete="off">
                       </div>
                      </div>
 
@@ -151,7 +154,7 @@
 
                       <div class="form-group col-md-3">
                         <label for="credits">Credits</label>
-                        <select name="credits" id="credits" class="form-control">
+                        <select name="credits" id="credits" class="form-control" required>
 
                             <option hidden>Choose</option>
                             <option>1</option>
@@ -164,13 +167,14 @@
                       </div>
                         <div class="form-group col-md-9">
                         <label for="department">Department</label>
-                        <select name="department" id="department" class="form-control">
+                        <select name="department" id="department" class="form-control" required>
 
                             <option hidden>Choose</option>
                             <option>Electrical and Electronics Engineering</option>
                             <option>Electrical and Communication Engineering</option>
-                            
                             <option>Computer Science and Engineering</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Civil Engineering</option>
                             <option>Electronics and Instrumentation Engineering</option>
                             <option>Science and Humanities</option>
                             <option>Mathematics</option>

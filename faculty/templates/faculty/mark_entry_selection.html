@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'faculty/mark_entry.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>bootstrap 4 sidebar</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -57,7 +57,7 @@
           <a href="{% url 'faculty_logout' %}" class="logout">Log Out</a>
         </li>
         <li>
-          <a href="#" class="article">Contact us</a>
+          <a href="{% url 'facultyhome' %}" class="article">Developed by Ashu Khan</a>
         </li>
       </ul>
     </nav>
@@ -99,7 +99,7 @@
                       <div class="d-flex bd-highlight">
                         <div class="p-2 flex-fill bd-highlight">
 
-                              <select name="course_info" class="form-control ">
+                              <select name="course_info" class="form-control " required>
                                   {% for teacher in teacher_assigned %}
 
                                       <option value="{{teacher.course_id }}{{teacher.year_of_assign}}{{teacher.semester}}"> {{teacher.course_id.course_name}} </option>

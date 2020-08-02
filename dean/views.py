@@ -1,7 +1,5 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from django.views.generic import View
-from django.template.loader import get_template
 from .models import AddFaculty, AddCourse, AssignTeacher,DeanNotifications,LastDate,DeanUser
 from django.contrib import messages
 from faculty.models import MarksEntry, FacultyNotifications
@@ -10,28 +8,39 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 from itertools import groupby
 
-
 def index(request):
-    date=datetime.now().date().strftime("%d-%m-%Y")
-    print(date)
-    return render(request,'dean/adminhome.html')
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    print(year_list)
+    return render(request,'dean/adminhome.html',{'year_list':year_list})
 
 
 def dean_evaluative_check(request):
 
-     year =request.POST["year"]
-     semester =request.POST["semester"]
-     dean_check = DeanNotifications.objects.filter(year=year,semester=semester)
-     if dean_check.count()==0:
-         messages.error(request,"No Evaluation is submitted !Please try again later")
-         return redirect('deanhome')
-     else:
+    year =request.POST["year"]
+    semester =request.POST["semester"]
+    dean_check = DeanNotifications.objects.filter(year=year,semester=semester)
+    if dean_check.count()==0:
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_list=list()
+        year_start=year_end-3
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
+        
+        messages.error(request,"No Evaluation is submitted !Please try again later")
+        return render(request,'dean/adminhome.html',{'year_list':year_list})
+    else:
         notifications=DeanNotifications.objects.filter(year=year,semester=semester)
         return render(request,'dean/admin_check.html',{'notifications':notifications})
 
 
 def addfaculty(request):
-    return render(request, 'dean/addfaculty.html')
+    date=datetime.now().date().strftime("%Y-%m-%d")
+    year=datetime.now().date().strftime("%Y")
+    return render(request, 'dean/addfaculty.html',{'date':date})
 
 def addcourse(request):
     return render(request, 'dean/addcourses.html')
@@ -41,7 +50,13 @@ def assign(request):
 
     all_teachers = AddFaculty.objects.all()
     print(all_teachers)
-    return render(request, 'dean/assignteachers.html', {'courses': all_courses , 'teachers': all_teachers})
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+   
+    return render(request, 'dean/assignteachers.html', {'courses': all_courses , 'teachers': all_teachers,'year_list':year_list})
 
 def assign_teacher_form_submission(request):
     course_id = request.POST["course_id"]
@@ -54,12 +69,14 @@ def assign_teacher_form_submission(request):
         teacher_assigned=AssignTeacher.objects.get(course_id=course_id,year_of_assign=year_of_assign,semester=semester)
         error="Faculty is already assigned to this course in given  year of assign and semester"
         all_courses = AddCourse.objects.all()
-
-
         all_teachers = AddFaculty.objects.all()
-
-        return render(request, 'dean/assignteachers.html', {'courses': all_courses , 'teachers': all_teachers,'error':error})
-
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_list=list()
+        year_start=year_end-3
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
+        return render(request, 'dean/assignteachers.html', {'courses': all_courses , 'teachers': all_teachers,'error':error,'year_list':year_list})
+        
     except ObjectDoesNotExist:
 
         assign_teachers = AssignTeacher(course_id=added_course, employee_code=assign_teacher,year_of_assign=year_of_assign,semester=semester )
@@ -129,7 +146,12 @@ def add_course_form_submission(request):
 
 
 def evaluation_home(request):
-    return render(request,'dean/evaluation_home.html')
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request,'dean/evaluation_home.html',{'year_list':year_list})
 
 def evaluation_year_sub(request):
     year = request.POST["year"]
@@ -140,8 +162,13 @@ def evaluation_year_sub(request):
     obj = notifications.count()
 
     if obj == 0:
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_list=list()
+        year_start=year_end-3
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
         messages.error(request, 'No mark entry is submitted according to the given year and semester')
-        return render(request, 'dean/evaluation_home.html', {})
+        return render(request, 'dean/evaluation_home.html', {'year_list':year_list})
     else:
 
         return render(request, 'dean/evaluation_selection.html', {'notifications': notifications})
@@ -149,11 +176,9 @@ def evaluation_year_sub(request):
 def evaluation(request):
     course_info = request.POST["course_info"]
     course_id = str(course_info)[:6]
-    year = str(course_info)[6:15]
-    semester = str(course_info)[15:]
-    print(course_id)
-    print(year)
-    print(semester)
+    year = str(course_info)[6:10]
+    semester = str(course_info)[10:]
+   
     students=MarksEntry.objects.filter(course_id=course_id, year=year, semester=semester , Accepted=0)
     return render(request, 'dean/evaluation.html',
                           {'students': students, 'course_id': course_id, 'year': year, 'semester': semester})
@@ -162,6 +187,11 @@ def dean_verdict(request):
     year = request.POST["year"]
     semester = request.POST["semester"]
     course_id = request.POST["course_id"]
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     if 'accept' in request.POST:
         teacher=AssignTeacher.objects.get(year_of_assign=year,semester=semester,course_id=course_id)
         employee_code=teacher.employee_code.employee_code
@@ -174,7 +204,7 @@ def dean_verdict(request):
         MarksEntry.objects.filter(year=year,semester=semester,course_id=course_id).update(Accepted='1')
         success="you have successfully accepted the submitted mark entry!"
 
-        return render(request,"dean/evaluation_home.html",{'success':success})
+        return render(request,"dean/evaluation_home.html",{'success':success,'year_list':year_list})
     else:
         DeanNotifications.objects.filter(year=year, semester=semester, course_id=course_id).delete()
         MarksEntry.objects.filter(year=year, semester=semester, course_id=course_id).delete()
@@ -185,9 +215,18 @@ def dean_verdict(request):
                                                             course_id=course_id)
         notifications.save()
         error="you have successfully declined the submitted mark entry"
-        return render(request,"dean/evaluation_home.html",{'error':error})
+        return render(request,"dean/evaluation_home.html",{'error':error,'year_list':year_list})
+def grade_home(request):
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=2016
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request,"dean/grade_home.html",{'year_list':year_list})
 def grade_card_generate(request):
-    students=StudentProfile.objects.all()
+    year=request.POST["year"]
+    branch=request.POST["department"]
+    students=StudentProfile.objects.filter(yearofreg=year,branch=branch)
     return render(request,"dean/grade_card_generation.html",{'students':students})
 def grade_card(request):
     profile_details =dict()
@@ -229,11 +268,11 @@ def grade_card(request):
     profile_details['branch']=student_profile.branch
     profile_details['date_publish']=datetime.now().date().strftime("%d-%b-%Y")
     profile_details['dob']=student_profile.dateofbirth.strftime("%d-%b-%Y")
-
-
+    
+    
 
     student_marks=MarksEntry.objects.filter(registration_no=registration_no)
-    if student_marks.count()>=2:
+    if student_marks.count()>=4:
         for student_mark in student_marks:
 
             month_of_reg=student_profile.monthofreg
@@ -300,7 +339,7 @@ def grade_card(request):
                     credits_reg['nine'] = int(credits_reg['nine'])+int(course.credits)
                 if count == 10:
                     credits_reg['ten'] = int(credits_reg['ten'])+ int(course.credits)
-
+                
                 if count == 1:
                     credits_earned['one']=int(credits_earned['one']) +int(single_subject_grade_entry['credits'])
                 if count == 2:
@@ -321,10 +360,10 @@ def grade_card(request):
                     credits_earned['nine'] = int(credits_earned['nine'])+ int(single_subject_grade_entry['credits'])
                 if count == 10:
                     credits_earned['ten'] = int(credits_earned['ten'])+ int(single_subject_grade_entry['credits'])
-                single_subject_grade_entry['credits'] = course.credits
+                single_subject_grade_entry['credits'] = course.credits    
                 grade_entered.append(single_subject_grade_entry.copy())
 
-
+                
 
             else:
 
@@ -374,7 +413,7 @@ def grade_card(request):
                 single_subject_grade_entry['month'] = month
                 single_subject_grade_entry['year'] = year_of_reg
                 credits_reg['total_grades'] = credits_reg['total_grades'] + float(grade_calc(student_mark.Grade)) * float(course.credits)
-
+                
                 if count == 1:
                     credits_reg['one']=int(credits_reg['one']) +int(course.credits)
                 if count == 2:
@@ -395,7 +434,7 @@ def grade_card(request):
                     credits_reg['nine'] = int(credits_reg['nine'])+int(course.credits)
                 if count == 10:
                     credits_reg['ten'] = int(credits_reg['ten'])+ int(course.credits)
-
+                
                 if count == 1:
                     credits_earned['one']=int(credits_earned['one']) +int(single_subject_grade_entry['credits'])
                 if count == 2:
@@ -416,10 +455,10 @@ def grade_card(request):
                     credits_earned['nine'] = int(credits_earned['nine'])+ int(single_subject_grade_entry['credits'])
                 if count == 10:
                     credits_earned['ten'] = int(credits_earned['ten'])+ int(single_subject_grade_entry['credits'])
-                single_subject_grade_entry['credits'] = course.credits
+                single_subject_grade_entry['credits'] = course.credits    
                 grade_entered.append(single_subject_grade_entry.copy())
-
-
+                
+           
             grades_entry['students']=grade_entered
             credits_reg['total'] =credits_reg['one']+credits_reg['two'] + credits_reg['three'] + credits_reg['four'] + credits_reg['five'] + credits_reg['six'] + credits_reg['seven'] + credits_reg['eight'] + credits_reg['nine'] +credits_reg['ten']
             print(credits_reg['total'])
@@ -460,44 +499,55 @@ def grade_calc(grade):
     return point
 
 def last_date_mark(request):
-    return render(request,"dean/last_date_mark.html")
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request,"dean/last_date_mark.html",{'year_list':year_list})
 
 def last_date_mark_submission(request):
     year=request.POST["year"]
     semester=request.POST["semester"]
     date=request.POST["date"]
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=year_end-3
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
     if AssignTeacher.objects.filter(year_of_assign=year,semester=semester).exists():
         if MarksEntry.objects.filter(year=year,semester=semester,Accepted=0).exists():
             if LastDate.objects.get(year=year,semester=semester).exists():
                 error="Date cannot be assigned as the last date of mark entry is already assigned for given year ann semester "
-                return render(request,"dean/last_date_mark.html",{'error':error})
+                return render(request,"dean/last_date_mark.html",{'error':error,'year_list':year_list})
             else:
                 lastdate=LastDate.objects.create(year=year,semester=semester,date=date)
                 lastdate.save()
                 success="Last Date notification is submitted for teachers"
-                return render(request,"dean/last_date_mark.html",{'success':success})
+                return render(request,"dean/last_date_mark.html",{'success':success,'year_list':year_list})
         else:
-            if MarksEntry.objects.filter(year=year, semester=semester, Accepted=1).exists():
+            teacher_no=AssignTeacher.objects.filter(year_of_assign=year,semester=semester)
+            if MarksEntry.objects.filter(year=year, semester=semester, Accepted=1).count()==teacher_no.count():
                 error="Last date cannot be submitted as all the teachers have already submitted their mark entry with verification from dean"
-                return render(request,"dean/last_date_mark.html",{'error':error})
+                return render(request,"dean/last_date_mark.html",{'error':error,'year_list':year_list})
             else:
                try:
                     LastDate.objects.filter(year=year, semester=semester).exists()
-                    error = "Date cannot be assigned as the last date of mark entry is already assigned for given year ann semester "
-                    return render(request, "dean/last_date_mark.html", {'error': error})
+                    error = "Date cannot be assigned as the last date of mark entry is already assigned for given year and semester "
+                    return render(request, "dean/last_date_mark.html", {'error': error,'year_list':year_list})
 
                except ObjectDoesNotExist:
                     lastdate = LastDate.objects.create(year=year, semester=semester, date=date)
                     lastdate.save()
                     success = "Last Date notification is submitted for teachers"
-                    return render(request, "dean/last_date_mark.html", {'success': success})
+                    return render(request, "dean/last_date_mark.html", {'success': success,'year_list':year_list})
 
 
     else:
         error="Date cannot be submitted as no teacher is assigned any course according to given year and semester "
-        return render(request, "dean/last_date_mark.html", {'error': error})
+        return render(request, "dean/last_date_mark.html", {'error': error,'year_list':year_list})
 
-def changepassword(request):
+def changepassworddean(request):
     return render(request,"dean/changepassword.html")
 
 def changepasswordsubmission(request):
@@ -523,20 +573,30 @@ def dean_logout(request):
 
 
 def report_home(request):
-    return render(request,"dean/report_home.html")
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    year_start=2016
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    return render(request, "dean/report_home.html",{'year_list':year_list})
 
-def report_sub( request,*args,**kwargs):
-    template= get_template('dean/report.html')
-    occurence_list=[]
-    iterate=[]
-    year =request.POST["year"]
-    branch=request.POST["department"]
-    semester=request.POST["semester"]
-    yearofreg =str(year)[0:4]
-    print(semester)
-    name_of_students=StudentProfile.objects.filter(yearofreg=yearofreg,branch=branch)
+
+def report_sub(request, *args, **kwargs):
+
+    occurence_list = []
+
+    year = request.POST["year"]
+    branch = request.POST["department"]
+    semester = request.POST["semester"]
+    if semester == 'Odd Semester':
+        exam = 'January-June'
+    else:
+        exam = 'July-December'
+
+    name_of_students = StudentProfile.objects.filter(branch=branch)
     for student in name_of_students:
-        student_occured=MarksEntry.objects.filter(registration_no=student.registration_no,semester=semester)
+        student_occured = MarksEntry.objects.filter(registration_no=student.registration_no, semester=semester,
+                                                    year=year)
         for student_list in student_occured:
             occurence_list.append(student_list.registration_no)
 
@@ -545,263 +605,538 @@ def report_sub( request,*args,**kwargs):
         val = len(list(values))
         if val >= occurrence:
             occurrence, num_times = key, val
+    student_name_list = []
+    print(occurence_list)
+    for student in occurence_list:
+        if student not in student_name_list:
+            student_name_list.append(student)
 
+    print(student_name_list)
 
     num = int(num_times)
-    each_student_details=dict()
-    final_merge_list=[]
-    for student in name_of_students:
+    if num != 0:
+        each_student_details = dict()
+        final_merge_list = []
+        for student in student_name_list:
 
-        registration_no = student.registration_no
-        print(registration_no)
-        profile_details =dict()
-        grades_entry = dict()
-        single_subject_grade_entry=dict()
-        grade_entered=[]
-        credits_reg=dict()
-        credits_earned=dict()
-        credits_earned['one']=0
-        credits_earned['two']=0
-        credits_earned['three']=0
-        credits_earned['four']=0
-        credits_earned['five']=0
-        credits_earned['six']=0
-        credits_earned['seven']=0
-        credits_earned['eight']=0
-        credits_earned['nine']=0
-        credits_earned['ten']=0
-        credits_reg['one_reg'] =0
-        credits_reg['two_reg'] = 0
-        credits_reg['three_reg'] =0
-        credits_reg['four_reg'] =0
-        credits_reg['five_reg'] =0
-        credits_reg['six_reg'] = 0
-        credits_reg['seven_reg'] = 0
-        credits_reg['eight_reg'] = 0
-        credits_reg['nine_reg'] = 0
-        credits_reg['ten_reg'] =0
-        credits_reg['none_reg']='#'
-        credits_reg['total_reg']=0
-        credits_reg['total_grades_reg']=0
+            registration_no = student.registration_no
 
-        student_profile=StudentProfile.objects.get(registration_no=registration_no)
-        profile_details['first_name']=student_profile.first_name
-        profile_details['last_name']=student_profile.last_name
+            profile_details = dict()
 
-        profile_details['regno']= student_profile.registration_no
-        profile_details['gender']=student_profile.gender
-        profile_details['branch']=student_profile.branch
-        profile_details['date_publish']=datetime.now().date().strftime("%d-%b-%Y")
-        profile_details['dob']=student_profile.dateofbirth.strftime("%d/%m/%Y")
-        serial_no= str(registration_no)[2:4]+"00"+str(registration_no)[6:10]
-        profile_details['serialno']=serial_no
+            single_subject_grade_entry = dict()
+            grade_entered = []
+            credits_reg = dict()
+            credits_earned = dict()
+            credits_earned['one'] = 0
+            credits_earned['two'] = 0
+            credits_earned['three'] = 0
+            credits_earned['four'] = 0
+            credits_earned['five'] = 0
+            credits_earned['six'] = 0
+            credits_earned['seven'] = 0
+            credits_earned['eight'] = 0
+            credits_earned['nine'] = 0
+            credits_earned['ten'] = 0
+            credits_reg['one_reg'] = 0
+            credits_reg['two_reg'] = 0
+            credits_reg['three_reg'] = 0
+            credits_reg['four_reg'] = 0
+            credits_reg['five_reg'] = 0
+            credits_reg['six_reg'] = 0
+            credits_reg['seven_reg'] = 0
+            credits_reg['eight_reg'] = 0
+            credits_reg['nine_reg'] = 0
+            credits_reg['ten_reg'] = 0
+            credits_reg['none_reg'] = '#'
+            credits_reg['total_reg'] = 0
+            credits_reg['total_grades_reg'] = 0
 
-        student_marks=MarksEntry.objects.filter(registration_no=registration_no)
-        if student_marks.count()>=0:
-            for student_mark in student_marks:
+            student_profile = StudentProfile.objects.get(registration_no=registration_no)
+            profile_details['first_name'] = student_profile.first_name
+            profile_details['last_name'] = student_profile.last_name
 
-                month_of_reg=student_profile.monthofreg
-                year_of_reg=int(student_profile.yearofreg)
-                first_month="January"
+            profile_details['regno'] = student_profile.registration_no
 
-                second_month="July"
-                if month_of_reg.title()==first_month:
-                    odd_sem="Odd Semester"
-                    even_sem="Even Semester"
-                    sem=student_mark.semester
-                    count=0
-                    year=student_mark.year
-                    check=int(str(year)[0:4])
-                    month=""
+            profile_details['date_publish'] = datetime.now().date().strftime("%d-%b-%Y")
 
-                    while year_of_reg < check:
-                        count=count+2
-                        year_of_reg+=1
+            serial_no = str(registration_no)[2:4] + "00" + str(registration_no)[6:10]
+            profile_details['serialno'] = serial_no
 
+            student_marks = MarksEntry.objects.filter(registration_no=registration_no, year=year, semester=semester)
+            if student_marks.count() >= 0:
+                for student_mark in student_marks:
 
+                    month_of_reg = student_profile.monthofreg
+                    year_of_reg = int(student_profile.yearofreg)
+                    first_month = "January"
 
+                    second_month = "July"
+                    if month_of_reg.title() == first_month:
+                        odd_sem = "Odd Semester"
+                        even_sem = "Even Semester"
+                        sem = student_mark.semester
+                        count = 0
+                        year = student_mark.year
+                        check = int(str(year)[0:4])
+                        month = ""
 
-                    if sem==odd_sem:
-                        month="MAY"
-                        count=count+1
+                        while year_of_reg < check:
+                            count = count + 2
+                            year_of_reg += 1
 
-                    else:
-                        count=count+2
-                        month="DEC"
+                        if sem == odd_sem:
+                            month = "MAY"
+                            count = count + 1
 
-                    single_subject_grade_entry['semester']=count
-                    single_subject_grade_entry['course_id']=student_mark.course_id
-                    course_id= student_mark.course_id
-                    course=AddCourse.objects.get(course_id=course_id)
-                    single_subject_grade_entry['course_name']=course.course_name
-                    if student_mark.Grade=='U' or student_mark.Grade=='AB':
-                        single_subject_grade_entry['credits']=0
-                    else:
+                        else:
+                            count = count + 2
+                            month = "DEC"
+
+                        single_subject_grade_entry['semester'] = count
+                        single_subject_grade_entry['course_id'] = student_mark.course_id
+                        course_id = student_mark.course_id
+                        course = AddCourse.objects.get(course_id=course_id)
+                        single_subject_grade_entry['course_name'] = course.course_name
+                        if student_mark.Grade == 'U' or student_mark.Grade == 'AB':
+                            single_subject_grade_entry['credits'] = 0
+                        else:
+                            single_subject_grade_entry['credits'] = course.credits
+
+                        single_subject_grade_entry['grade'] = student_mark.Grade
+
+                        credits_reg['total_grades_reg'] = credits_reg['total_grades_reg'] + float(
+                            grade_calc(student_mark.Grade)) * float(course.credits)
+                        if count == 1:
+                            credits_reg['one_reg'] = int(credits_reg['one_reg']) + int(course.credits)
+                        if count == 2:
+                            credits_reg['two_reg'] = int(credits_reg['two_reg']) + int(course.credits)
+                        if count == 3:
+                            credits_reg['three_reg'] = int(credits_reg['three_reg']) + int(course.credits)
+                        if count == 4:
+                            credits_reg['four_reg'] = int(credits_reg['four_reg']) + int(course.credits)
+                        if count == 5:
+                            credits_reg['five_reg'] = int(credits_reg['five_reg']) + int(course.credits)
+                        if count == 6:
+                            credits_reg['six_reg'] = int(credits_reg['six_reg']) + int(course.credits)
+                        if count == 7:
+                            credits_reg['seven_reg'] = int(credits_reg['seven_reg']) + int(course.credits)
+                        if count == 8:
+                            credits_reg['eight_reg'] = int(credits_reg['eight_reg']) + int(course.credits)
+                        if count == 9:
+                            credits_reg['nine_reg'] = int(credits_reg['nine_reg']) + int(course.credits)
+                        if count == 10:
+                            credits_reg['ten_reg'] = int(credits_reg['ten_reg']) + int(course.credits)
+
+                        if count == 1:
+                            credits_earned['one'] = int(credits_earned['one']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 2:
+                            credits_earned['two'] = int(credits_earned['two']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 3:
+                            credits_earned['three'] = int(credits_earned['three']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 4:
+                            credits_earned['four'] = int(credits_earned['four']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 5:
+                            credits_earned['five'] = int(credits_earned['five']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 6:
+                            credits_earned['six'] = int(credits_earned['six']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 7:
+                            credits_earned['seven'] = int(credits_earned['seven']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 8:
+                            credits_earned['eight'] = int(credits_earned['eight']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 9:
+                            credits_earned['nine'] = int(credits_earned['nine']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 10:
+                            credits_earned['ten'] = int(credits_earned['ten']) + int(
+                                single_subject_grade_entry['credits'])
                         single_subject_grade_entry['credits'] = course.credits
-
-                    single_subject_grade_entry['grade']=student_mark.Grade
-                    single_subject_grade_entry['gradepoint']=grade_calc(student_mark.Grade)
-                    single_subject_grade_entry['month']=month
-                    single_subject_grade_entry['year']=year_of_reg
-                    credits_reg['total_grades_reg']= credits_reg['total_grades_reg'] + float(grade_calc(student_mark.Grade))*float(course.credits)
-                    if count == 1:
-                        credits_reg['one_reg']=int(credits_reg['one_reg']) +int(course.credits)
-                    if count == 2:
-                        credits_reg['two_reg'] =int(credits_reg['two_reg'])+ int(course.credits)
-                    if count == 3:
-                        credits_reg['three_reg'] = int(credits_reg['three_reg']) + int(course.credits)
-                    if count == 4:
-                        credits_reg['four_reg'] =  int(credits_reg['four_reg']) +int(course.credits)
-                    if count == 5:
-                        credits_reg['five_reg'] =  int(credits_reg['five_reg']) + int(course.credits)
-                    if count == 6:
-                        credits_reg['six_reg'] =  int(credits_reg['six_reg']) + int(course.credits)
-                    if count == 7:
-                        credits_reg['seven_reg'] = int(credits_reg['seven_reg']) +  int(course.credits)
-                    if count == 8:
-                        credits_reg['eight_reg'] = int(credits_reg['eight_reg'])+ int(course.credits)
-                    if count == 9:
-                        credits_reg['nine_reg'] = int(credits_reg['nine_reg'])+int(course.credits)
-                    if count == 10:
-                        credits_reg['ten_reg'] = int(credits_reg['ten_reg'])+ int(course.credits)
-
-                    if count == 1:
-                        credits_earned['one']=int(credits_earned['one']) +int(single_subject_grade_entry['credits'])
-                    if count == 2:
-                        credits_earned['two'] =int(credits_earned['two'])+ int(single_subject_grade_entry['credits'])
-                    if count == 3:
-                        credits_earned['three'] = int(credits_earned['three']) + int(single_subject_grade_entry['credits'])
-                    if count == 4:
-                        credits_earned['four'] =  int(credits_earned['four']) + int(single_subject_grade_entry['credits'])
-                    if count == 5:
-                        credits_earned['five'] =  int(credits_earned['five']) + int(single_subject_grade_entry['credits'])
-                    if count == 6:
-                        credits_earned['six'] =  int(credits_earned['six']) + int(single_subject_grade_entry['credits'])
-                    if count == 7:
-                        credits_earned['seven'] = int(credits_earned['seven']) + int(single_subject_grade_entry['credits'])
-                    if count == 8:
-                        credits_earned['eight'] = int(credits_earned['eight'])+ int(single_subject_grade_entry['credits'])
-                    if count == 9:
-                        credits_earned['nine'] = int(credits_earned['nine'])+ int(single_subject_grade_entry['credits'])
-                    if count == 10:
-                        credits_earned['ten'] = int(credits_earned['ten'])+ int(single_subject_grade_entry['credits'])
-                    single_subject_grade_entry['credits'] = course.credits
-                    grade_entered.append(single_subject_grade_entry.copy())
+                        grade_entered.append(single_subject_grade_entry.copy())
 
 
+
+                    else:
+
+                        odd_sem = "Odd Semester"
+                        even_sem = "Even Semester"
+                        sem = student_mark.semester
+
+                        year = student_mark.year
+                        check = int(str(year)[0:4])
+                        month = ""
+                        if year_of_reg == check:
+                            count = 1
+                            month = "DEC"
+                        else:
+                            count = 1
+                            if year_of_reg == (check - 1):
+
+                                if sem == odd_sem:
+                                    month = "MAY"
+                                    count = count + 1
+                                else:
+                                    month = "DEC"
+                                    count = count + 2
+                                year_of_reg = year_of_reg + 1
+                            else:
+                                while year_of_reg < check:
+                                    count = count + 2
+                                    year_of_reg = year_of_reg + 1
+
+                                if sem == odd_sem:
+                                    month = "DEC"
+                                    count = count + 2
+                                else:
+                                    month = "MAY"
+                                    count = count + 1
+                        single_subject_grade_entry['semester'] = count
+                        single_subject_grade_entry['course_id'] = student_mark.course_id
+                        course_id = student_mark.course_id
+                        course = AddCourse.objects.get(course_id=course_id)
+                        single_subject_grade_entry['course_name'] = course.course_name
+                        if student_mark.Grade == 'U' or student_mark.Grade == 'AB':
+                            single_subject_grade_entry['credits'] = 0
+                        else:
+                            single_subject_grade_entry['credits'] = course.credits
+                        single_subject_grade_entry['grade'] = student_mark.Grade
+
+                        credits_reg['total_grades_reg'] = credits_reg['total_grades_reg'] + float(
+                            grade_calc(student_mark.Grade)) * float(course.credits)
+
+                        if count == 1:
+                            credits_reg['one_reg'] = int(credits_reg['one_reg']) + int(course.credits)
+                        if count == 2:
+                            credits_reg['two_reg'] = int(credits_reg['two_reg']) + int(course.credits)
+                        if count == 3:
+                            credits_reg['three_reg'] = int(credits_reg['three_reg']) + int(course.credits)
+                        if count == 4:
+                            credits_reg['four_reg'] = int(credits_reg['four_reg']) + int(course.credits)
+                        if count == 5:
+                            credits_reg['five_reg'] = int(credits_reg['five_reg']) + int(course.credits)
+                        if count == 6:
+                            credits_reg['six_reg'] = int(credits_reg['six_reg']) + int(course.credits)
+                        if count == 7:
+                            credits_reg['seven_reg'] = int(credits_reg['seven_reg']) + int(course.credits)
+                        if count == 8:
+                            credits_reg['eight_reg'] = int(credits_reg['eight_reg']) + int(course.credits)
+                        if count == 9:
+                            credits_reg['nine_reg'] = int(credits_reg['nine_reg']) + int(course.credits)
+                        if count == 10:
+                            credits_reg['ten_reg'] = int(credits_reg['ten_reg']) + int(course.credits)
+
+                        if count == 1:
+                            credits_earned['one'] = int(credits_earned['one']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 2:
+                            credits_earned['two'] = int(credits_earned['two']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 3:
+                            credits_earned['three'] = int(credits_earned['three']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 4:
+                            credits_earned['four'] = int(credits_earned['four']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 5:
+                            credits_earned['five'] = int(credits_earned['five']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 6:
+                            credits_earned['six'] = int(credits_earned['six']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 7:
+                            credits_earned['seven'] = int(credits_earned['seven']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 8:
+                            credits_earned['eight'] = int(credits_earned['eight']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 9:
+                            credits_earned['nine'] = int(credits_earned['nine']) + int(
+                                single_subject_grade_entry['credits'])
+                        if count == 10:
+                            credits_earned['ten'] = int(credits_earned['ten']) + int(
+                                single_subject_grade_entry['credits'])
+                        single_subject_grade_entry['credits'] = course.credits
+                        grade_entered.append(single_subject_grade_entry.copy())
+
+                    credits_reg['total_reg'] = credits_reg['one_reg'] + credits_reg['two_reg'] + credits_reg[
+                        'three_reg'] + credits_reg['four_reg'] + credits_reg['five_reg'] + credits_reg['six_reg'] + \
+                                               credits_reg['seven_reg'] + credits_reg['eight_reg'] + credits_reg[
+                                                   'nine_reg'] + credits_reg['ten_reg']
+
+                    credits_earned['total'] = credits_earned['one'] + credits_earned['two'] + credits_earned['three'] + \
+                                              credits_earned['four'] + credits_earned['five'] + credits_earned['six'] + \
+                                              credits_earned['seven'] + credits_earned['eight'] + credits_earned[
+                                                  'nine'] + credits_earned['ten']
+
+                    credits_reg['cgpa'] = grade_card_cgpa(registration_no)
+            profile_details['grades'] = grade_entered
+            profile_details.update(credits_reg.copy())
+            profile_details.update(credits_earned.copy())
+            final_merge_list.append(profile_details.copy())
+
+        each_student_details['students'] = final_merge_list
+        context = {
+            'range': range(num), 'each_student_details': each_student_details, 'branch': branch, 'yearofreg': year,
+            'exam': exam
+        }
+
+
+        return render(request,"dean/report.html",context)
+    else:
+        year_end=int(datetime.now().date().strftime("%Y"))
+        year_list=list()
+        year_start=2016
+        for i in range(year_start,year_end+1):
+            year_list.append(i)
+        error = "Please change the required branch or year of examination or semester as no entry is present for the provided entries."
+        return render(request, "dean/report_home.html", {'error': error,'year_list':year_list})
+
+
+def grade_card_cgpa(registration_no):
+    profile_details = dict()
+    grades_entry = dict()
+    single_subject_grade_entry = dict()
+    grade_entered = []
+    credits_reg = dict()
+    credits_earned = dict()
+    credits_earned['one'] = 0
+    credits_earned['two'] = 0
+    credits_earned['three'] = 0
+    credits_earned['four'] = 0
+    credits_earned['five'] = 0
+    credits_earned['six'] = 0
+    credits_earned['seven'] = 0
+    credits_earned['eight'] = 0
+    credits_earned['nine'] = 0
+    credits_earned['ten'] = 0
+    credits_reg['one'] = 0
+    credits_reg['two'] = 0
+    credits_reg['three'] = 0
+    credits_reg['four'] = 0
+    credits_reg['five'] = 0
+    credits_reg['six'] = 0
+    credits_reg['seven'] = 0
+    credits_reg['eight'] = 0
+    credits_reg['nine'] = 0
+    credits_reg['ten'] = 0
+    credits_reg['none'] = '#'
+    credits_reg['total'] = 0
+    credits_reg['total_grades'] = 0
+
+    student_profile = StudentProfile.objects.get(registration_no=registration_no)
+    profile_details['first_name'] = student_profile.first_name
+    profile_details['last_name'] = student_profile.last_name
+
+    profile_details['regno'] = student_profile.registration_no
+    profile_details['gender'] = student_profile.gender
+    profile_details['branch'] = student_profile.branch
+    profile_details['date_publish'] = datetime.now().date().strftime("%d-%b-%Y")
+    profile_details['dob'] = student_profile.dateofbirth.strftime("%d-%b-%Y")
+
+    student_marks = MarksEntry.objects.filter(registration_no=registration_no)
+    if student_marks.count() >= 2:
+        for student_mark in student_marks:
+
+            month_of_reg = student_profile.monthofreg
+            year_of_reg = int(student_profile.yearofreg)
+            first_month = "January"
+
+            second_month = "July"
+            if month_of_reg.title() == first_month:
+                odd_sem = "Odd Semester"
+                even_sem = "Even Semester"
+                sem = student_mark.semester
+                count = 0
+                year = student_mark.year
+                check = int(str(year)[0:4])
+                month = ""
+
+                while year_of_reg < check:
+                    count = count + 2
+                    year_of_reg += 1
+
+                if sem == odd_sem:
+                    month = "MAY"
+                    count = count + 1
 
                 else:
+                    count = count + s2
+                    month = "DEC"
 
-                    odd_sem = "Odd Semester"
-                    even_sem = "Even Semester"
-                    sem = student_mark.semester
-
-                    year = student_mark.year
-                    check = int(str(year)[0:4])
-                    month=""
-                    if year_of_reg == check:
-                        count =1
-                        month ="DEC"
-                    else:
-                        count=1
-                        if year_of_reg==(check-1):
-
-                            if sem == odd_sem:
-                                month = "MAY"
-                                count = count + 1
-                            else:
-                                month = "DEC"
-                                count = count + 2
-                            year_of_reg=year_of_reg + 1
-                        else:
-                            while year_of_reg < check:
-                                count=count+2
-                                year_of_reg=year_of_reg+1
-
-                            if sem==odd_sem:
-                                month="DEC"
-                                count=count+2
-                            else:
-                                month="MAY"
-                                count=count+1
-                    single_subject_grade_entry['semester'] = count
-                    single_subject_grade_entry['course_id'] = student_mark.course_id
-                    course_id = student_mark.course_id
-                    course = AddCourse.objects.get(course_id=course_id)
-                    single_subject_grade_entry['course_name'] = course.course_name
-                    if student_mark.Grade=='U' or student_mark.Grade=='AB':
-                        single_subject_grade_entry['credits']=0
-                    else:
-                        single_subject_grade_entry['credits'] = course.credits
-                    single_subject_grade_entry['grade'] = student_mark.Grade
-                    single_subject_grade_entry['gradepoint'] = grade_calc(student_mark.Grade)
-                    single_subject_grade_entry['month'] = month
-                    single_subject_grade_entry['year'] = year_of_reg
-                    credits_reg['total_grades_reg'] = credits_reg['total_grades_reg'] + float(grade_calc(student_mark.Grade)) * float(course.credits)
-
-                    if count == 1:
-                        credits_reg['one_reg']=int(credits_reg['one_reg']) +int(course.credits)
-                    if count == 2:
-                        credits_reg['two_reg'] =int(credits_reg['two_reg'])+ int(course.credits)
-                    if count == 3:
-                        credits_reg['three_reg'] = int(credits_reg['three_reg']) + int(course.credits)
-                    if count == 4:
-                        credits_reg['four_reg'] =  int(credits_reg['four_reg']) +int(course.credits)
-                    if count == 5:
-                        credits_reg['five_reg'] =  int(credits_reg['five_reg']) + int(course.credits)
-                    if count == 6:
-                        credits_reg['six_reg'] =  int(credits_reg['six_reg']) + int(course.credits)
-                    if count == 7:
-                        credits_reg['seven_reg'] = int(credits_reg['seven_reg']) +  int(course.credits)
-                    if count == 8:
-                        credits_reg['eight_reg'] = int(credits_reg['eight_reg'])+ int(course.credits)
-                    if count == 9:
-                        credits_reg['nine_reg'] = int(credits_reg['nine_reg'])+int(course.credits)
-                    if count == 10:
-                        credits_reg['ten_reg'] = int(credits_reg['ten_reg'])+ int(course.credits)
-
-                    if count == 1:
-                        credits_earned['one']=int(credits_earned['one']) +int(single_subject_grade_entry['credits'])
-                    if count == 2:
-                        credits_earned['two'] =int(credits_earned['two'])+ int(single_subject_grade_entry['credits'])
-                    if count == 3:
-                        credits_earned['three'] = int(credits_earned['three']) + int(single_subject_grade_entry['credits'])
-                    if count == 4:
-                        credits_earned['four'] =  int(credits_earned['four']) + int(single_subject_grade_entry['credits'])
-                    if count == 5:
-                        credits_earned['five'] =  int(credits_earned['five']) + int(single_subject_grade_entry['credits'])
-                    if count == 6:
-                        credits_earned['six'] =  int(credits_earned['six']) + int(single_subject_grade_entry['credits'])
-                    if count == 7:
-                        credits_earned['seven'] = int(credits_earned['seven']) + int(single_subject_grade_entry['credits'])
-                    if count == 8:
-                        credits_earned['eight'] = int(credits_earned['eight'])+ int(single_subject_grade_entry['credits'])
-                    if count == 9:
-                        credits_earned['nine'] = int(credits_earned['nine'])+ int(single_subject_grade_entry['credits'])
-                    if count == 10:
-                        credits_earned['ten'] = int(credits_earned['ten'])+ int(single_subject_grade_entry['credits'])
+                single_subject_grade_entry['semester'] = count
+                single_subject_grade_entry['course_id'] = student_mark.course_id
+                course_id = student_mark.course_id
+                course = AddCourse.objects.get(course_id=course_id)
+                single_subject_grade_entry['course_name'] = course.course_name
+                if student_mark.Grade == 'U' or student_mark.Grade == 'AB':
+                    single_subject_grade_entry['credits'] = 0
+                else:
                     single_subject_grade_entry['credits'] = course.credits
-                    grade_entered.append(single_subject_grade_entry.copy())
+
+                single_subject_grade_entry['grade'] = student_mark.Grade
+                single_subject_grade_entry['gradepoint'] = grade_calc(student_mark.Grade)
+                single_subject_grade_entry['month'] = month
+                single_subject_grade_entry['year'] = year_of_reg
+                credits_reg['total_grades'] = credits_reg['total_grades'] + float(
+                    grade_calc(student_mark.Grade)) * float(course.credits)
+                if count == 1:
+                    credits_reg['one'] = int(credits_reg['one']) + int(course.credits)
+                if count == 2:
+                    credits_reg['two'] = int(credits_reg['two']) + int(course.credits)
+                if count == 3:
+                    credits_reg['three'] = int(credits_reg['three']) + int(course.credits)
+                if count == 4:
+                    credits_reg['four'] = int(credits_reg['four']) + int(course.credits)
+                if count == 5:
+                    credits_reg['five'] = int(credits_reg['five']) + int(course.credits)
+                if count == 6:
+                    credits_reg['six'] = int(credits_reg['six']) + int(course.credits)
+                if count == 7:
+                    credits_reg['seven'] = int(credits_reg['seven']) + int(course.credits)
+                if count == 8:
+                    credits_reg['eight'] = int(credits_reg['eight']) + int(course.credits)
+                if count == 9:
+                    credits_reg['nine'] = int(credits_reg['nine']) + int(course.credits)
+                if count == 10:
+                    credits_reg['ten'] = int(credits_reg['ten']) + int(course.credits)
+
+                if count == 1:
+                    credits_earned['one'] = int(credits_earned['one']) + int(single_subject_grade_entry['credits'])
+                if count == 2:
+                    credits_earned['two'] = int(credits_earned['two']) + int(single_subject_grade_entry['credits'])
+                if count == 3:
+                    credits_earned['three'] = int(credits_earned['three']) + int(single_subject_grade_entry['credits'])
+                if count == 4:
+                    credits_earned['four'] = int(credits_earned['four']) + int(single_subject_grade_entry['credits'])
+                if count == 5:
+                    credits_earned['five'] = int(credits_earned['five']) + int(single_subject_grade_entry['credits'])
+                if count == 6:
+                    credits_earned['six'] = int(credits_earned['six']) + int(single_subject_grade_entry['credits'])
+                if count == 7:
+                    credits_earned['seven'] = int(credits_earned['seven']) + int(single_subject_grade_entry['credits'])
+                if count == 8:
+                    credits_earned['eight'] = int(credits_earned['eight']) + int(single_subject_grade_entry['credits'])
+                if count == 9:
+                    credits_earned['nine'] = int(credits_earned['nine']) + int(single_subject_grade_entry['credits'])
+                if count == 10:
+                    credits_earned['ten'] = int(credits_earned['ten']) + int(single_subject_grade_entry['credits'])
+                single_subject_grade_entry['credits'] = course.credits
+                grade_entered.append(single_subject_grade_entry.copy())
 
 
 
-                credits_reg['total_reg'] =credits_reg['one_reg']+credits_reg['two_reg'] + credits_reg['three_reg'] + credits_reg['four_reg'] + credits_reg['five_reg'] + credits_reg['six_reg'] + credits_reg['seven_reg'] + credits_reg['eight_reg'] + credits_reg['nine_reg'] +credits_reg['ten_reg']
+            else:
 
-                credits_earned['total'] =credits_earned['one']+credits_earned['two'] + credits_earned['three'] + credits_earned['four'] + credits_earned['five'] + credits_earned['six'] + credits_earned['seven'] + credits_earned['eight'] + credits_earned['nine'] +credits_earned['ten']
-                x=float(credits_reg['total_grades_reg'])/float(credits_reg['total_reg'])
-                credits_reg['cgpa']= format(x,'.2f')
-        profile_details['grades']=grade_entered
-        profile_details.update(credits_reg.copy())
-        profile_details.update(credits_earned.copy())
-        final_merge_list.append(profile_details.copy())
+                odd_sem = "Odd Semester"
+                even_sem = "Even Semester"
+                sem = student_mark.semester
 
-    each_student_details['students']=final_merge_list
-    context={
-        'range':range(num),'each_student_details':each_student_details,'branch':branch,'yearofreg':yearofreg
-    }
-    html=template.render(context)
-    
-    return HttpResponse(html)
+                year = student_mark.year
+                check = int(str(year)[0:4])
+                month = ""
+                if year_of_reg == check:
+                    count = 1
+                    month = "DEC"
+                else:
+                    count = 1
+                    if year_of_reg == (check - 1):
 
-  
+                        if sem == odd_sem:
+                            month = "MAY"
+                            count = count + 1
+                        else:
+                            month = "DEC"
+                            count = count + 2
+                        year_of_reg = year_of_reg + 1
+                    else:
+                        while year_of_reg < check:
+                            count = count + 2
+                            year_of_reg = year_of_reg + 1
+
+                        if sem == odd_sem:
+                            month = "DEC"
+                            count = count + 2
+                        else:
+                            month = "MAY"
+                            count = count + 1
+                single_subject_grade_entry['semester'] = count
+                single_subject_grade_entry['course_id'] = student_mark.course_id
+                course_id = student_mark.course_id
+                course = AddCourse.objects.get(course_id=course_id)
+                single_subject_grade_entry['course_name'] = course.course_name
+                if student_mark.Grade == 'U' or student_mark.Grade == 'AB':
+                    single_subject_grade_entry['credits'] = 0
+                else:
+                    single_subject_grade_entry['credits'] = course.credits
+                single_subject_grade_entry['grade'] = student_mark.Grade
+                single_subject_grade_entry['gradepoint'] = grade_calc(student_mark.Grade)
+                single_subject_grade_entry['month'] = month
+                single_subject_grade_entry['year'] = year_of_reg
+                credits_reg['total_grades'] = credits_reg['total_grades'] + float(
+                    grade_calc(student_mark.Grade)) * float(course.credits)
+
+                if count == 1:
+                    credits_reg['one'] = int(credits_reg['one']) + int(course.credits)
+                if count == 2:
+                    credits_reg['two'] = int(credits_reg['two']) + int(course.credits)
+                if count == 3:
+                    credits_reg['three'] = int(credits_reg['three']) + int(course.credits)
+                if count == 4:
+                    credits_reg['four'] = int(credits_reg['four']) + int(course.credits)
+                if count == 5:
+                    credits_reg['five'] = int(credits_reg['five']) + int(course.credits)
+                if count == 6:
+                    credits_reg['six'] = int(credits_reg['six']) + int(course.credits)
+                if count == 7:
+                    credits_reg['seven'] = int(credits_reg['seven']) + int(course.credits)
+                if count == 8:
+                    credits_reg['eight'] = int(credits_reg['eight']) + int(course.credits)
+                if count == 9:
+                    credits_reg['nine'] = int(credits_reg['nine']) + int(course.credits)
+                if count == 10:
+                    credits_reg['ten'] = int(credits_reg['ten']) + int(course.credits)
+
+                if count == 1:
+                    credits_earned['one'] = int(credits_earned['one']) + int(single_subject_grade_entry['credits'])
+                if count == 2:
+                    credits_earned['two'] = int(credits_earned['two']) + int(single_subject_grade_entry['credits'])
+                if count == 3:
+                    credits_earned['three'] = int(credits_earned['three']) + int(single_subject_grade_entry['credits'])
+                if count == 4:
+                    credits_earned['four'] = int(credits_earned['four']) + int(single_subject_grade_entry['credits'])
+                if count == 5:
+                    credits_earned['five'] = int(credits_earned['five']) + int(single_subject_grade_entry['credits'])
+                if count == 6:
+                    credits_earned['six'] = int(credits_earned['six']) + int(single_subject_grade_entry['credits'])
+                if count == 7:
+                    credits_earned['seven'] = int(credits_earned['seven']) + int(single_subject_grade_entry['credits'])
+                if count == 8:
+                    credits_earned['eight'] = int(credits_earned['eight']) + int(single_subject_grade_entry['credits'])
+                if count == 9:
+                    credits_earned['nine'] = int(credits_earned['nine']) + int(single_subject_grade_entry['credits'])
+                if count == 10:
+                    credits_earned['ten'] = int(credits_earned['ten']) + int(single_subject_grade_entry['credits'])
+                single_subject_grade_entry['credits'] = course.credits
+                grade_entered.append(single_subject_grade_entry.copy())
+
+            grades_entry['students'] = grade_entered
+            credits_reg['total'] = credits_reg['one'] + credits_reg['two'] + credits_reg['three'] + credits_reg[
+                'four'] + credits_reg['five'] + credits_reg['six'] + credits_reg['seven'] + credits_reg['eight'] + \
+                                   credits_reg['nine'] + credits_reg['ten']
+            print(credits_reg['total'])
+            credits_earned['total'] = credits_earned['one'] + credits_earned['two'] + credits_earned['three'] + \
+                                      credits_earned['four'] + credits_earned['five'] + credits_earned['six'] + \
+                                      credits_earned['seven'] + credits_earned['eight'] + credits_earned['nine'] + \
+                                      credits_earned['ten']
+            x = float(credits_reg['total_grades']) / float(credits_reg['total'])
+            y =format(x, '.2f')
+
+
+        return y
 

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'faculty/mark_entry.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>bootstrap 4 sidebar</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -57,7 +57,7 @@
           <a href="{% url 'faculty_logout' %}" class="logout">Log Out</a>
         </li>
         <li>
-          <a href="#" class="article">Contact us</a>
+          <a href="{% url 'facultyhome' %}" class="article">Developed by Ashu Khan</a>
         </li>
       </ul>
     </nav>
@@ -109,22 +109,22 @@
           
             <div class="p-2 flex-fill bd-highlight ">
                 <label for="email_id"> Email id</label>
-                <input name="emailid" type="text" class="form-control" id="email_id" value="{{ personal_details.email }}" >
+                <input name="emailid" type="text" class="form-control" id="email_id" value="{{ personal_details.email }}" required >
             </div>
          </div>
          <div class="d-flex bd-highlight">
             <div class="p-2 flex-fill bd-highlight ">
                 <label for="firstname"> First name</label>
-                <input name="first_name" type="text" class="form-control" id="firstname" value="{{ personal_details.first_name }}">
+                <input name="first_name" type="text" class="form-control" id="firstname" value="{{ personal_details.first_name }}"required>
             </div>
          
             <div class="p-2 flex-fill bd-highlight">
                 <label for="lastname"> Last name</label>
-                <input name="last_name"" type="text" class="form-control" id="lastname" value="{{ personal_details.last_name }}">
+                <input name="last_name"" type="text" class="form-control" id="lastname" value="{{ personal_details.last_name }}" required>
             </div>
             <div class="p-2 flex-fill bd-highlight">
                 <label for="Dateofbirth">Date Of Birth</label>
-                    <input name="dateofbirth" type="date" class="form-control" id="Dateofbirth" value="{{ dob }}"> 
+                    <input name="dateofbirth" type="date" class="form-control" id="Dateofbirth" value="{{ dob }}" max="{{ date }}"required> 
             </div>
          </div>
          <div class="d-flex bd-highlight">

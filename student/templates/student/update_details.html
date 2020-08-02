@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="{% static 'student/homestyle.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="{% static 'student/update_details.css' %}">
-    <title>bootstrap 4 sidebar</title>
+ 
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -46,9 +47,7 @@
                 <li>
             <a href="{% url 'student_course_reg' %}">Course Registration</a>
              </li>
-             <li>
-            <a href="{% url 'update_details_student' %}">Update</a>
-             </li>
+             
 
      	</ul>
    		
@@ -58,7 +57,7 @@
    				<a href="{% url 'student_logout' %}" class="logout">Log Out</a>
    			</li>
    			<li>
-   				<a href="#" class="article">Contact us</a>
+          <a href="{% url 'studenthome' %}" class="article">Developed by Ashu Khan</a>
    			</li>
    		</ul>
    	</nav>

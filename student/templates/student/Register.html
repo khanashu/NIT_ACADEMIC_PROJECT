@@ -10,6 +10,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Registration</title>
+    <script>
+        function password_test()
+        {
+            var pass = document.getElementById("password").value;
+            var re_pass = document.getElementById("re_password").value;
+            if(pass == re_pass)
+            {
+                return true;
+            }
+            else
+            {   
+                alert("Passwords donot match!!")
+                document.getElementById("password").style.borderColor="red";
+                document.getElementById("re_password").style.borderColor="red";
+                return false;
+            }
+        }
+    </script>
     <style type="text/css">
       body{
         background-image: url({% static 'student/try.jpg' %});
@@ -87,40 +105,40 @@
                 <div class="form-row">
                   <div class="form-group col-md-6">
                     <label for="firstname">First Name</label>
-                    <input name="first_name" type="text" class="form-control" id="firstname" placeholder="First Name">
+                    <input name="first_name" type="text" class="form-control" id="firstname" placeholder="First Name" required>
                   </div>
                   <div class="form-group col-md-6">
                     <label for="lastname">Last Name</label>
-                    <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Last Name">
+                    <input name="last_name" type="text" class="form-control" id="lastname" placeholder="Last Name"required>
                   </div>
                  </div>
                 <div class="form-group">
                      <label for="inputEmail">Email</label>
-                      <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email">
+                      <input name="email" type="email" class="form-control" id="inputEmail" placeholder="Email" required>
                 </div>
 
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                   <label for="inputPassword4">Password</label>
-                    <input name="password" type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                   <label for="password">Password</label>
+                    <input name="password" type="password" class="form-control" id="password" placeholder="Password" required>
                   </div>
                   <div class="form-group col-md-6">
-                    <label for="RePassword4">Retype Password</label>
-                    <input name="re_password" type="password" class="form-control" id="RePassword4" placeholder="Retype Password">
+                    <label for="re_password">Retype Password</label>
+                    <input name="re_password" type="password" class="form-control" id="re_password" placeholder="Retype Password" required>
                   </div>
                 </div>
                 <div class="form-row ">
                 <div class="form-group col-md-4 ">
                   <label for="registration_no"> Registration Number</label>
-                  <input name="registration_no" type="text" class="form-control" id="registration_no" placeholder=" Registration Number">
+                  <input name="registration_no" type="number" class="form-control" id="registration_no" placeholder=" Registration Number" required >
                 </div>
                  <div class="form_group col-md-4 ">
                  	<label for="year_of_reg">Year of Registration</label>
-                 	<input name="year_of_reg" type="text" class="form-control" id="year_of_reg" placeholder="eg: 2016 or 2017">
+                 	<input name="year_of_reg" type="number" class="form-control" id="year_of_reg" placeholder="eg: 2016 or 2017" max="{{ year }}"required>
                  </div>
                     <div class="form-group col-md-4">
                     <label for="month_of_reg">Month of Registration</label>
-                    <select name="month_of_reg" id="month_of_reg" class="form-control">
+                    <select name="month_of_reg" id="month_of_reg" class="form-control" required>
                         <option hidden> Choose</option>
                         <option>January</option>
                         <option>July</option>
@@ -133,26 +151,32 @@ s
                 <div class="form-row justify-content-around">
                   <div class="form-group col-md-4 ">
                     <label for="Dateofbirth">Date Of Birth</label>
-                    <input name="dateofbirth" type="date" class="form-control" id="Dateofbirth">
+                    <input name="dateofbirth" type="date" class="form-control" id="Dateofbirth" max="{{ date }}" required>
 
                    
                   </div>
                   <div class="form-group col-md-4">
                     <label for="Branch">Branch</label>
-                    <select name="branch" id="Branch" class="form-control">
+                    <select name="branch" id="Branch" class="form-control" required>
                         <option hidden> Choose</option>
-                        <option>Computer Science and Engineering</option>
-                        <option>Electrical and Electronics Engineering</option>
-                        <option>Electrical and Communication Engineering</option>
-                        <option>Electronics and Instrumentation Engineering</option>
-                        <option>Mechanical Engineering</option>
-                        <option>Civil Engineering</option>
+                            <option>Electrical and Electronics Engineering</option>
+                            <option>Electrical and Communication Engineering</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Civil Engineering</option>
+                            <option>Computer Science and Engineering</option>
+                            <option>Electronics and Instrumentation Engineering</option>
+                            <option>Science and Humanities</option>
+                            <option>Mathematics</option>
+                            <option>Physics</option>
+                            <option>Chemistry</option>
+                            <option>Social Sciences</option>
+                            <option>Managerial Sciences</option>
 
                     </select>
                   </div>
                     <div class="form-group col-md-4 ">
                     <label for="Gender">Gender</label>
-                    <select name="gender" id="Gender" class="form-control">
+                    <select name="gender" id="Gender" class="form-control" required>
                       
                         <option hidden>Choose</option>
                         <option>Male</option>
@@ -163,7 +187,7 @@ s
                 
                 </div>
                   
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary"  onclick="return password_test();">
                    <button type="reset" class="btn btn-danger">Reset</button>
               </form>
      

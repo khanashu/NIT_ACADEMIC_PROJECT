@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'faculty/homestyle.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
     
-    <title>bootstrap 4 sidebar</title>
+    <title>NIT Nagaland Academic Performance Information System</title>
   </head>
   <body>
    
@@ -60,7 +60,7 @@
           <a href="{% url 'faculty_logout' %}" class="logout">Log Out</a>
         </li>
         <li>
-          <a href="#" class="article">Contact us</a>
+          <a href="{% url 'facultyhome' %}" class="article">Developed by Ashu Khan</a>
         </li>
       </ul>
     </nav>
@@ -113,17 +113,16 @@
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-fill bd-highlight">
 
-                  <select name="year" class="form-control ">
+                  <select name="year" class="form-control " required>
                       
                         <option hidden> Year</option>
-                        <option>2017-2018</option>
-                        <option>2018-2019</option>
-                        <option>2019-2020</option>
-                        
+                        {% for year in year_list %}
+                        <option>{{ year }}</option>
+                        {% endfor %}
                     </select>
             </div>
             <div class="p-2 flex-fill bd-highlight">
-                  <select  name="semester" class="form-control ">
+                  <select  name="semester" class="form-control " required>
                       
                         <option hidden>Semester</option>
                         <option>Odd Semester</option>
@@ -172,17 +171,16 @@
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-fill bd-highlight">
 
-                  <select name="year" class="form-control ">
+                  <select name="year" class="form-control " required>
 
                         <option hidden> Year</option>
-                        <option>2017-2018</option>
-                        <option>2018-2019</option>
-                        <option>2019-2020</option>
-
+                        {% for year in year_list %}
+                        <option>{{ year }}</option>
+                        {% endfor %}
                     </select>
             </div>
             <div class="p-2 flex-fill bd-highlight">
-                  <select  name="semester" class="form-control ">
+                  <select  name="semester" class="form-control " required>
 
                         <option hidden>Semester</option>
                         <option>Odd Semester</option>

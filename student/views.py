@@ -13,7 +13,9 @@ def index(request):
 
     return render(request,'student/student_home_temp.html',{'student':student_profile})
 def register(request):
-    return render(request,'student/Register.html')
+    date=datetime.now().date().strftime("%Y-%m-%d")
+    year=datetime.now().date().strftime("%Y")
+    return render(request,'student/Register.html',{'date':date,'year':year})
 def register_check(request):
     profile_details=dict()
     profile_details['first_name'] = request.POST["first_name"]
@@ -67,9 +69,15 @@ def student_logout(request):
     return redirect('login')
 def student_course_reg(request):
     courses =AddCourse.objects.all()
-
-
-    return render(request,'student/student_reg.html',{'courses':courses})
+    student=request.session.get('username')
+    student_info=StudentProfile.objects.get(registration_no=student)
+    year_start=int(student_info.yearofreg)
+    year_end=int(datetime.now().date().strftime("%Y"))
+    year_list=list()
+    for i in range(year_start,year_end+1):
+        year_list.append(i)
+    print(year_list)
+    return render(request,'student/student_reg.html',{'courses':courses,'year_list':year_list})
 
 def course_registration(request):
     username = request.session.get('username')
@@ -77,18 +85,18 @@ def course_registration(request):
     registration_no = student_profile
     course_id = request.POST["course_id"]
     course_name_id = request.POST["course_name"]
-
+    year_of_course = request.POST["year_of_course"]
+    semester = request.POST["semester"]
 
 
     if course_id == course_name_id:
         try:
-            student = StudentCourse.objects.get(registration_no=registration_no,course_id=course_id.upper())
+            student = StudentCourse.objects.get(registration_no=registration_no,course_id=course_id.upper(),year_of_course=year_of_course,semester=semester)
             messages.error(request, 'You have already registered for this course! Please try again')
             return redirect('student_course_reg')
 
         except ObjectDoesNotExist:
-            year_of_course = request.POST["year_of_course"]
-            semester = request.POST["semester"]
+           
             course=AddCourse.objects.get(course_id=course_id)
             course_reg = StudentCourse(registration_no=registration_no,course_id=course_id.upper(),course_name=course.course_name, year_of_course=year_of_course,semester=semester)
             course_reg.save()
